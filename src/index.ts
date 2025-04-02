@@ -3,6 +3,7 @@ import './tasks/size_contracts';
 import './type-extensions';
 import { extendConfig } from 'hardhat/config';
 import 'hardhat/types/config';
+import type { HardhatPlugin } from 'hardhat/types/plugins';
 
 extendConfig((config, userConfig) => {
   config.contractSizer = Object.assign(
@@ -19,3 +20,13 @@ extendConfig((config, userConfig) => {
     userConfig.contractSizer,
   );
 });
+
+const hardhatContractSizerPlugin: HardhatPlugin = {
+  // TODO: read from package.json
+  // id: pluginName.split('/').pop(),
+  // npmPackage: pluginName,
+  id: 'hardhat-contract-sizer',
+  npmPackage: '@solidstate/hardhat-contract-sizer',
+};
+
+export default hardhatContractSizerPlugin;
