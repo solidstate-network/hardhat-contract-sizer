@@ -1,7 +1,6 @@
 import packageJson from '../package.json';
 import './type-extensions.js';
 import { task } from 'hardhat/config';
-import 'hardhat/types/config';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
 
 const pluginName = packageJson.name;
