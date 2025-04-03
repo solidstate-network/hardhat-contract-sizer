@@ -1,13 +1,9 @@
 import { sizeContracts } from '../logic.js';
-import type { HookContext, SolidityHooks } from 'hardhat/types/hooks';
+import type { SolidityHooks } from 'hardhat/types/hooks';
 import path from 'path';
 
 export default async (): Promise<Partial<SolidityHooks>> => ({
-  onCleanUpArtifacts: async (
-    context: HookContext,
-    artifactPaths: string[],
-    next: (nextContext: HookContext, artifactPaths: string[]) => Promise<void>,
-  ) => {
+  onCleanUpArtifacts: async (context, artifactPaths, next) => {
     // TODO: skip if solidity coverage running
     if (context.config.contractSizer.runOnCompile) {
       const fullyQualifiedNames = artifactPaths.map(
