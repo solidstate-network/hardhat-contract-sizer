@@ -19,11 +19,11 @@ yarn add --dev @solidstate/hardhat-contract-sizer
 Load plugin in Hardhat config:
 
 ```javascript
-import HardhatContractSizerExporter from "hardhat-abi-exporter";
+import HardhatContractSizer from '@solidstate/hardhat-contract-sizer';
 
 const config: HardhatUserConfig = {
   plugins: [
-    HardhatContractSizerExporter,
+    HardhatContractSizer,
   ],
   contractSizer: {
     ... // see table for configuration options
