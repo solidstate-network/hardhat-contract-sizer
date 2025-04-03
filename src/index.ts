@@ -1,4 +1,3 @@
-import './tasks/compile';
 import './tasks/size_contracts';
 import sizeContractsTask from './tasks/size_contracts.js';
 import './type-extensions.js';

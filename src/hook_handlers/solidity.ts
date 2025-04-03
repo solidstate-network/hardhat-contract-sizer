@@ -11,7 +11,10 @@ export default async (): Promise<Partial<SolidityHooks>> => {
         artifactPaths: string[],
       ) => Promise<void>,
     ) {
-      await hre.tasks.getTask('size-contracts').run({ noCompile: true });
+      // TODO: skip if solidity coverage running
+      if (context.config.contractSizer?.runOnCompile) {
+        await hre.tasks.getTask('size-contracts').run({ noCompile: true });
+      }
 
       return next(context, artifactPaths);
     },

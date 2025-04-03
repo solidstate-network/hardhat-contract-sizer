@@ -27,12 +27,13 @@ const UNITS = { B: 1, kB: 1000, KiB: 1024 };
 const sizeContractsAction: NewTaskActionFunction<
   SizeContractsActionArguments
 > = async (args, hre): Promise<void> => {
+  const config = hre.config.contractSizer;
+
   if (!args.noCompile) {
     // TODO: will task names no longer be stored in constants?
     await hre.tasks.getTask('compile').run();
+    if (config.runOnCompile) return;
   }
-
-  const config = hre.config.contractSizer;
 
   if (!UNITS[config.unit]) {
     throw new HardhatPluginError(pluginName, `Invalid unit: ${config.unit}`);
