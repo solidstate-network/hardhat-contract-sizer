@@ -13,8 +13,6 @@ export interface SizeContractsActionArguments {
   noCompile?: boolean;
 }
 
-export interface SizeContractsActionResult {}
-
 // see EIPs 170 and 3860 for more information
 // https://eips.ethereum.org/EIPS/eip-170
 // https://eips.ethereum.org/EIPS/eip-3860
