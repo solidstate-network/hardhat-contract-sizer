@@ -32,19 +32,7 @@ const sizeContractsAction: NewTaskActionFunction<
     await hre.tasks.getTask('compile').run();
   }
 
-  const config: HardhatContractSizerConfig = Object.assign(
-    {
-      alphaSort: false,
-      runOnCompile: false,
-      flat: false,
-      strict: false,
-      only: [],
-      except: [],
-      outputFile: null,
-      unit: 'KiB',
-    },
-    hre.config.contractSizer,
-  );
+  const config = hre.config.contractSizer;
 
   if (!UNITS[config.unit]) {
     throw new HardhatPluginError(pluginName, `Invalid unit: ${config.unit}`);
