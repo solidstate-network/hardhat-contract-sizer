@@ -19,7 +19,16 @@ yarn add --dev @solidstate/hardhat-contract-sizer
 Load plugin in Hardhat config:
 
 ```javascript
-require('@solidstate/hardhat-contract-sizer');
+import HardhatContractSizerExporter from "hardhat-abi-exporter";
+
+const config: HardhatUserConfig = {
+  plugins: [
+    HardhatContractSizerExporter,
+  ],
+  contractSizer: {
+    ... // see table for configuration options
+  },
+};
 ```
 
 Add configuration under the `contractSizer` key:
@@ -34,16 +43,6 @@ Add configuration under the `contractSizer` key:
 | `except`       | `Array` of `String` matchers used to exclude contracts                                                                      | `[]`    |
 | `outputFile`   | file path to write contract size report                                                                                     | `null`  |
 | `unit`         | unit of measurement for the size of contracts, which can be expressed in 'B' (bytes), 'kB' (kilobytes) or 'KiB' (kibibytes) | `KiB`   |
-
-```javascript
-contractSizer: {
-  alphaSort: true,
-  runOnCompile: true,
-  flat: true,
-  strict: true,
-  only: [':ERC20$'],
-}
-```
 
 Run the included Hardhat task to output compiled contract sizes:
 
