@@ -6,7 +6,7 @@ import type { HardhatPlugin } from 'hardhat/types/plugins';
 
 const pluginName = packageJson.name;
 
-const hardhatContractSizerPlugin: HardhatPlugin = {
+const plugin: HardhatPlugin = {
   id: pluginName.split('/').pop()!,
   npmPackage: pluginName!,
   tasks: [
@@ -25,4 +25,4 @@ const hardhatContractSizerPlugin: HardhatPlugin = {
   },
 };
 
-export default hardhatContractSizerPlugin;
+export default plugin;

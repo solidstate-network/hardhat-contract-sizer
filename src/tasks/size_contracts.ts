@@ -5,9 +5,10 @@ export interface SizeContractsActionArguments {
   noCompile?: boolean;
 }
 
-const sizeContractsAction: NewTaskActionFunction<
-  SizeContractsActionArguments
-> = async (args, hre): Promise<void> => {
+const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
+  args,
+  hre,
+): Promise<void> => {
   const config = hre.config.contractSizer;
 
   if (!args.noCompile) {
@@ -25,4 +26,4 @@ const sizeContractsAction: NewTaskActionFunction<
   await sizeContracts(config, artifacts, hre.config.paths.cache);
 };
 
-export default sizeContractsAction;
+export default action;
