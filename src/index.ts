@@ -1,6 +1,5 @@
-import './tasks/size_contracts';
-import sizeContractsTask from './tasks/size_contracts.js';
 import './type-extensions.js';
+import { task } from 'hardhat/config';
 import 'hardhat/types/config';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
 
@@ -10,7 +9,16 @@ const hardhatContractSizerPlugin: HardhatPlugin = {
   // npmPackage: pluginName,
   id: 'hardhat-contract-sizer',
   npmPackage: '@solidstate/hardhat-contract-sizer',
-  tasks: [sizeContractsTask],
+  tasks: [
+    task('size-contracts')
+      .setDescription('Output the size of compiled contracts')
+      .setAction(import.meta.resolve('./tasks/size_contracts.js'))
+      .addFlag({
+        name: 'noCompile',
+        description: "Don't compile before running this task",
+      })
+      .build(),
+  ],
   hookHandlers: {
     config: import.meta.resolve('./hook_handlers/config.js'),
     solidity: import.meta.resolve('./hook_handlers/solidity.js'),
