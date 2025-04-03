@@ -58,7 +58,7 @@ export async function exec(
   };
 
   const outputData: {
-    fullName: string;
+    sourceName: string;
     displayName: string;
     deploySize: number;
     previousDeploySize?: number;
@@ -71,29 +71,32 @@ export async function exec(
     '.hardhat_contract_sizer_output.json',
   );
 
-  const previousSizes: { [fullName: string]: number } = {};
-  const previousInitSizes: { [fullName: string]: number } = {};
+  const previousSizes: { [sourceName: string]: number } = {};
+  const previousInitSizes: { [sourceName: string]: number } = {};
 
   if (fs.existsSync(outputPath)) {
     const previousOutput: {
-      fullName: string;
+      sourceName: string;
       deploySize: number;
       initSize: number;
     }[] = JSON.parse((await fs.promises.readFile(outputPath)).toString());
 
     previousOutput.forEach((el) => {
-      previousSizes[el.fullName] = el.deploySize;
-      previousInitSizes[el.fullName] = el.initSize;
+      previousSizes[el.sourceName] = el.deploySize;
+      previousInitSizes[el.sourceName] = el.initSize;
     });
   }
 
   await Promise.all(
     artifacts.map(async (artifact) => {
-      const { sourceName: fullName, deployedBytecode, bytecode } = artifact;
+      const { sourceName, deployedBytecode, bytecode } = artifact;
 
-      if (config.only.length && !config.only.some((m) => fullName.match(m)))
+      if (config.only.length && !config.only.some((m) => sourceName.match(m)))
         return;
-      if (config.except.length && config.except.some((m) => fullName.match(m)))
+      if (
+        config.except.length &&
+        config.except.some((m) => sourceName.match(m))
+      )
         return;
 
       const deploySize = Buffer.from(
@@ -106,12 +109,12 @@ export async function exec(
       ).length;
 
       outputData.push({
-        fullName,
-        displayName: config.flat ? fullName.split(':').pop()! : fullName,
+        sourceName,
+        displayName: config.flat ? sourceName.split(':').pop()! : sourceName,
         deploySize,
-        previousDeploySize: previousSizes[fullName],
+        previousDeploySize: previousSizes[sourceName],
         initSize,
-        previousInitSize: previousInitSizes[fullName],
+        previousInitSize: previousInitSizes[sourceName],
       });
     }),
   );
