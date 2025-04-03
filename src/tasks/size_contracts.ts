@@ -1,4 +1,4 @@
-import { HardhatContractSizerConfig } from '../types.js';
+import packageJson from '../../package.json';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import fs from 'fs';
@@ -7,8 +7,7 @@ import { NewTaskActionFunction } from 'hardhat/types/tasks';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
 
-// TODO: read from package.json
-const pluginName = '@solidstate/hardhat-contract-sizer';
+const pluginName = packageJson.name;
 
 export interface SizeContractsActionArguments {
   noCompile?: boolean;

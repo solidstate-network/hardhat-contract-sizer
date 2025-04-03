@@ -1,14 +1,12 @@
+import packageJson from '../package.json';
 import './type-extensions.js';
 import { task } from 'hardhat/config';
 import 'hardhat/types/config';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
 
 const hardhatContractSizerPlugin: HardhatPlugin = {
-  // TODO: read from package.json
-  // id: pluginName.split('/').pop(),
-  // npmPackage: pluginName,
-  id: 'hardhat-contract-sizer',
-  npmPackage: '@solidstate/hardhat-contract-sizer',
+  id: packageJson.name.split('/').pop()!,
+  npmPackage: packageJson.name!,
   tasks: [
     task('size-contracts')
       .setDescription('Output the size of compiled contracts')
