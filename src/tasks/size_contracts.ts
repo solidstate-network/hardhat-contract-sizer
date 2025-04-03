@@ -1,8 +1,10 @@
 import packageJson from '../../package.json';
+import { HardhatContractSizerConfig } from '../types.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import fs from 'fs';
 import { HardhatPluginError } from 'hardhat/plugins';
+import { Abi, Artifact } from 'hardhat/types/artifacts';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
@@ -32,6 +34,20 @@ const sizeContractsAction: NewTaskActionFunction<
     if (config.runOnCompile) return;
   }
 
+  const fullyQualifiedNames = await hre.artifacts.getAllFullyQualifiedNames();
+
+  const artifacts = await Promise.all(
+    Array.from(fullyQualifiedNames).map((el) => hre.artifacts.readArtifact(el)),
+  );
+
+  await exec(config, artifacts, hre.config.paths.cache);
+};
+
+export async function exec(
+  config: HardhatContractSizerConfig,
+  artifacts: Artifact<Abi>[],
+  cachePath: string,
+): Promise<void> {
   if (!UNITS[config.unit]) {
     throw new HardhatPluginError(pluginName, `Invalid unit: ${config.unit}`);
   }
@@ -50,10 +66,8 @@ const sizeContractsAction: NewTaskActionFunction<
     previousInitSize?: number;
   }[] = [];
 
-  const fullNames = await hre.artifacts.getAllFullyQualifiedNames();
-
   const outputPath = path.resolve(
-    hre.config.paths.cache,
+    cachePath,
     '.hardhat_contract_sizer_output.json',
   );
 
@@ -74,14 +88,14 @@ const sizeContractsAction: NewTaskActionFunction<
   }
 
   await Promise.all(
-    Array.from(fullNames).map(async (fullName) => {
+    artifacts.map(async (artifact) => {
+      const { sourceName: fullName, deployedBytecode, bytecode } = artifact;
+
       if (config.only.length && !config.only.some((m) => fullName.match(m)))
         return;
       if (config.except.length && config.except.some((m) => fullName.match(m)))
         return;
 
-      const { deployedBytecode, bytecode } =
-        await hre.artifacts.readArtifact(fullName);
       const deploySize = Buffer.from(
         deployedBytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
         'hex',
@@ -260,6 +274,6 @@ const sizeContractsAction: NewTaskActionFunction<
       console.log(chalk.red(message));
     }
   }
-};
+}
 
 export default sizeContractsAction;

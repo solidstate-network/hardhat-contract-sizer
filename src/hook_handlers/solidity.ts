@@ -1,5 +1,6 @@
-import hre from 'hardhat';
+import { exec } from '../tasks/size_contracts.js';
 import type { HookContext, SolidityHooks } from 'hardhat/types/hooks';
+import path from 'path';
 
 export default async (): Promise<Partial<SolidityHooks>> => {
   const handlers: Partial<SolidityHooks> = {
@@ -12,8 +13,23 @@ export default async (): Promise<Partial<SolidityHooks>> => {
       ) => Promise<void>,
     ) {
       // TODO: skip if solidity coverage running
-      if (context.config.contractSizer?.runOnCompile) {
-        await hre.tasks.getTask('size-contracts').run({ noCompile: true });
+      if (context.config.contractSizer.runOnCompile) {
+        const fullyQualifiedNames = artifactPaths.map(
+          (el) =>
+            `${path.relative(context.config.paths.artifacts, path.dirname(el))}:${path.basename(el).split('.').shift()}`,
+        );
+
+        const artifacts = await Promise.all(
+          Array.from(fullyQualifiedNames).map((el) =>
+            context.artifacts.readArtifact(el),
+          ),
+        );
+
+        await exec(
+          context.config.contractSizer,
+          artifacts,
+          context.config.paths.cache,
+        );
       }
 
       return next(context, artifactPaths);
