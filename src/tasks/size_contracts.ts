@@ -95,10 +95,7 @@ const sizeContractsAction: NewTaskActionFunction<
 
       outputData.push({
         fullName,
-        displayName: config.flat
-          ? //   ? parseFullyQualifiedName(fullName).contractName
-            fullName.split(':').pop()!
-          : fullName,
+        displayName: config.flat ? fullName.split(':').pop()! : fullName,
         deploySize,
         previousDeploySize: previousSizes[fullName],
         initSize,
