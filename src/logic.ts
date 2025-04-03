@@ -138,24 +138,26 @@ export async function sizeContracts(
     },
   });
 
-  const compiler = {
-    version: 'TODO',
-    settings: { optimizer: { enabled: 'TODO', runs: 'TODO' } },
-  };
+  // TODO: show compiler information
 
-  table.push([
-    {
-      content: chalk.gray(`Solc version: ${compiler.version}`),
-    },
-    {
-      content: chalk.gray(
-        `Optimizer enabled: ${compiler.settings.optimizer.enabled}`,
-      ),
-    },
-    {
-      content: chalk.gray(`Runs: ${compiler.settings.optimizer.runs}`),
-    },
-  ]);
+  // const compiler = {
+  //   version: 'TODO',
+  //   settings: { optimizer: { enabled: 'TODO', runs: 'TODO' } },
+  // };
+
+  // table.push([
+  //   {
+  //     content: chalk.gray(`Solc version: ${compiler.version}`),
+  //   },
+  //   {
+  //     content: chalk.gray(
+  //       `Optimizer enabled: ${compiler.settings.optimizer.enabled}`,
+  //     ),
+  //   },
+  //   {
+  //     content: chalk.gray(`Runs: ${compiler.settings.optimizer.runs}`),
+  //   },
+  // ]);
 
   table.push([
     {
