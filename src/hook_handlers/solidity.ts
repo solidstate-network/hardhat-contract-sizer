@@ -1,4 +1,4 @@
-import { exec } from '../tasks/size_contracts.js';
+import { sizeContracts } from '../logic.js';
 import type { HookContext, SolidityHooks } from 'hardhat/types/hooks';
 import path from 'path';
 
@@ -25,7 +25,7 @@ export default async (): Promise<Partial<SolidityHooks>> => {
           ),
         );
 
-        await exec(
+        await sizeContracts(
           context.config.contractSizer,
           artifacts,
           context.config.paths.cache,
