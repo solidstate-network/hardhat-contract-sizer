@@ -12,3 +12,9 @@ declare module 'hardhat/types/config' {
     contractSizer?: HardhatContractSizerUserConfig;
   }
 }
+
+declare module 'hardhat/types/global-options' {
+  interface GlobalOptions {
+    noSizeContracts: boolean;
+  }
+}

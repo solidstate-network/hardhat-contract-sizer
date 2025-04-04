@@ -13,8 +13,8 @@ const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
 
   if (!args.noCompile) {
     // TODO: will task names no longer be stored in constants?
+    hre.globalOptions.noSizeContracts = true;
     await hre.tasks.getTask('compile').run();
-    if (config.runOnCompile) return;
   }
 
   const fullyQualifiedNames = await hre.artifacts.getAllFullyQualifiedNames();

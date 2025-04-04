@@ -1,6 +1,7 @@
 import packageJson from '../package.json';
 import './type-extensions.js';
-import { task } from 'hardhat/config';
+import { globalOption, task } from 'hardhat/config';
+import { ArgumentType } from 'hardhat/types/arguments';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
 
 const pluginName = packageJson.name;
@@ -22,6 +23,14 @@ const plugin: HardhatPlugin = {
     config: import.meta.resolve('./hook_handlers/config.js'),
     solidity: import.meta.resolve('./hook_handlers/solidity.js'),
   },
+  globalOptions: [
+    globalOption({
+      name: 'noSizeContracts',
+      description: 'Disables contract sizing',
+      defaultValue: false,
+      type: ArgumentType.BOOLEAN,
+    }),
+  ],
 };
 
 export default plugin;

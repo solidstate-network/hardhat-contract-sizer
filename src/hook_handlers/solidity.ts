@@ -5,7 +5,10 @@ import path from 'path';
 export default async (): Promise<Partial<SolidityHooks>> => ({
   onCleanUpArtifacts: async (context, artifactPaths, next) => {
     // TODO: skip if solidity coverage running
-    if (context.config.contractSizer.runOnCompile) {
+    if (
+      context.config.contractSizer.runOnCompile &&
+      !context.globalOptions.noSizeContracts
+    ) {
       const fullyQualifiedNames = artifactPaths.map(
         (el) =>
           `${path.relative(context.config.paths.artifacts, path.dirname(el))}:${path.basename(el).split('.').shift()}`,
