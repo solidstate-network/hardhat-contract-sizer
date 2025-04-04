@@ -9,6 +9,8 @@ const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
   args,
   hre,
 ): Promise<void> => {
+  if (hre.globalOptions.noSizeContracts) return;
+
   const config = hre.config.contractSizer;
 
   if (!args.noCompile) {
