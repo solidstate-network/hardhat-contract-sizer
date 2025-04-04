@@ -1,4 +1,4 @@
-import packageJson from '../package.json';
+import pkg from '../package.json';
 import { HardhatContractSizerConfig } from './types.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
@@ -7,8 +7,6 @@ import { HardhatPluginError } from 'hardhat/plugins';
 import { Abi, Artifact } from 'hardhat/types/artifacts';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
-
-const pluginName = packageJson.name;
 
 // see EIPs 170 and 3860 for more information
 // https://eips.ethereum.org/EIPS/eip-170
@@ -24,7 +22,7 @@ export async function sizeContracts(
   cachePath: string,
 ): Promise<void> {
   if (!UNITS[config.unit]) {
-    throw new HardhatPluginError(pluginName, `Invalid unit: ${config.unit}`);
+    throw new HardhatPluginError(pkg.name, `Invalid unit: ${config.unit}`);
   }
 
   const formatSize = (size: number) => {
@@ -97,7 +95,7 @@ export async function sizeContracts(
   outputData.reduce((acc, { displayName }) => {
     if (acc.has(displayName)) {
       throw new HardhatPluginError(
-        pluginName,
+        pkg.name,
         `ambiguous contract name: ${displayName}`,
       );
     }
@@ -249,7 +247,7 @@ export async function sizeContracts(
     const message = `Warning: ${oversizedContracts} contracts exceed the size limit for mainnet deployment (${formatSize(DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(INIT_SIZE_LIMIT)} ${config.unit} init).`;
 
     if (config.strict) {
-      throw new HardhatPluginError(pluginName, message);
+      throw new HardhatPluginError(pkg.name, message);
     } else {
       console.log(chalk.red(message));
     }
