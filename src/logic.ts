@@ -1,5 +1,5 @@
 import pkg from '../package.json';
-import { HardhatContractSizerConfig } from './types.js';
+import type { HardhatContractSizerConfig } from './types.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import fs from 'fs';
@@ -14,7 +14,11 @@ import stripAnsi from 'strip-ansi';
 const DEPLOYED_SIZE_LIMIT = 24576;
 const INIT_SIZE_LIMIT = 49152;
 
-const UNITS = { B: 1, kB: 1000, KiB: 1024 };
+export const UNITS: { [key in HardhatContractSizerConfig['unit']]: number } = {
+  B: 1,
+  kB: 1000,
+  KiB: 1024,
+};
 
 export async function sizeContracts(
   config: HardhatContractSizerConfig,
