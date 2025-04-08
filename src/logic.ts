@@ -236,19 +236,19 @@ export async function sizeContracts(
     ]);
   }
 
-  console.log(table.toString());
-
-  if (config.outputFile)
+  if (config.outputFile) {
     fs.writeFileSync(config.outputFile, `${stripAnsi(table.toString())}\n`);
+  } else {
+    console.log(table.toString());
+  }
 
   if (oversizedContracts > 0) {
-    console.log();
-
     const message = `Warning: ${oversizedContracts} contracts exceed the size limit for mainnet deployment (${formatSize(DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(INIT_SIZE_LIMIT)} ${config.unit} init).`;
 
     if (config.strict) {
       throw new HardhatPluginError(pkg.name, message);
-    } else {
+    } else if (!config.outputFile) {
+      console.log();
       console.log(chalk.red(message));
     }
   }
