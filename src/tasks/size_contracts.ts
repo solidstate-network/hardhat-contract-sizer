@@ -2,16 +2,14 @@ import { sizeContracts } from '../logic.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 export interface SizeContractsActionArguments {
-  noCompile?: boolean;
+  noCompile: boolean;
 }
 
 const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
   args,
   hre,
-): Promise<void> => {
+) => {
   if (hre.globalOptions.noSizeContracts) return;
-
-  const config = hre.config.contractSizer;
 
   if (!args.noCompile) {
     // TODO: will task names no longer be stored in constants?
@@ -25,7 +23,11 @@ const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
     Array.from(fullyQualifiedNames).map((el) => hre.artifacts.readArtifact(el)),
   );
 
-  await sizeContracts(config, artifacts, hre.config.paths.cache);
+  await sizeContracts(
+    hre.config.contractSizer,
+    artifacts,
+    hre.config.paths.cache,
+  );
 };
 
 export default action;
