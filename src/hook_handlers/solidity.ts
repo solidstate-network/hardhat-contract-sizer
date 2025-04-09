@@ -8,18 +8,7 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
 
     // TODO: skip if solidity coverage running
     if (config.runOnCompile && !context.globalOptions.noSizeContracts) {
-      const fullyQualifiedNames = artifactPaths.map(
-        (el) =>
-          `${path.relative(context.config.paths.artifacts, path.dirname(el))}:${path.basename(el).split('.').shift()}`,
-      );
-
-      const artifacts = await Promise.all(
-        Array.from(fullyQualifiedNames).map((el) =>
-          context.artifacts.readArtifact(el),
-        ),
-      );
-
-      await sizeContracts(config, artifacts, context.config.paths.cache);
+      await sizeContracts(context, config);
     }
 
     return next(context, artifactPaths);

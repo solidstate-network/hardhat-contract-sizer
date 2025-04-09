@@ -17,17 +17,7 @@ const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
     await hre.tasks.getTask('compile').run();
   }
 
-  const fullyQualifiedNames = await hre.artifacts.getAllFullyQualifiedNames();
-
-  const artifacts = await Promise.all(
-    Array.from(fullyQualifiedNames).map((el) => hre.artifacts.readArtifact(el)),
-  );
-
-  await sizeContracts(
-    hre.config.contractSizer,
-    artifacts,
-    hre.config.paths.cache,
-  );
+  await sizeContracts(hre, hre.config.contractSizer);
 };
 
 export default action;

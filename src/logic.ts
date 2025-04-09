@@ -5,6 +5,7 @@ import Table from 'cli-table3';
 import fs from 'fs';
 import { HardhatPluginError } from 'hardhat/plugins';
 import { Abi, Artifact } from 'hardhat/types/artifacts';
+import { HookContext } from 'hardhat/types/hooks';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
 
@@ -21,9 +22,8 @@ export const UNITS: { [key in HardhatContractSizerConfig['unit']]: number } = {
 };
 
 export async function sizeContracts(
+  context: HookContext,
   config: HardhatContractSizerConfig,
-  artifacts: Artifact<Abi>[],
-  cachePath: string,
 ) {
   const formatSize = (size: number) => {
     const divisor = UNITS[config.unit];
@@ -40,7 +40,7 @@ export async function sizeContracts(
   }[];
 
   const outputPath = path.resolve(
-    cachePath,
+    context.config.paths.cache,
     '.hardhat_contract_sizer_output.json',
   );
 
@@ -62,16 +62,23 @@ export async function sizeContracts(
     });
   }
 
-  // filter artifacts according to configuration
-  // TODO: process does not match that of abi-exporter
+  // get list of all contracts and filter according to configuraiton
 
-  artifacts = artifacts.filter(({ sourceName }) => {
-    if (config.only.length && !config.only.some((m) => sourceName.match(m)))
+  const fullNames = Array.from(
+    await context.artifacts.getAllFullyQualifiedNames(),
+  ).filter((fullName) => {
+    if (config.only.length && !config.only.some((m) => fullName.match(m)))
       return;
-    if (config.except.length && config.except.some((m) => sourceName.match(m)))
+    if (config.except.length && config.except.some((m) => fullName.match(m)))
       return;
     return true;
   });
+
+  // get contract artifacts
+
+  const artifacts = await Promise.all(
+    fullNames.map((fullName) => context.artifacts.readArtifact(fullName)),
+  );
 
   // calculate contract sizes and match with data from previous runs
 
