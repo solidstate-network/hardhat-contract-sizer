@@ -93,9 +93,11 @@ export async function sizeContracts(
       'hex',
     ).length;
 
+    const fullName = `${sourceName}:${contractName}`;
+
     return {
       sourceName,
-      displayName: config.flat ? sourceName : `${sourceName}:${contractName}`,
+      displayName: config.flat ? fullName.split('/').pop()! : fullName,
       deploySize,
       previousDeploySize: previousSizes[sourceName],
       initSize,
