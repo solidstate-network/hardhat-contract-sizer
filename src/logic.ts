@@ -24,25 +24,27 @@ export async function sizeContracts(
   config: HardhatContractSizerConfig,
   artifacts: Artifact<Abi>[],
   cachePath: string,
-): Promise<void> {
+) {
   const formatSize = (size: number) => {
     const divisor = UNITS[config.unit];
     return (size / divisor).toFixed(3);
   };
 
-  const outputData: {
+  type Output = {
     sourceName: string;
     displayName: string;
     deploySize: number;
     previousDeploySize?: number;
     initSize: number;
     previousInitSize?: number;
-  }[] = [];
+  }[];
 
   const outputPath = path.resolve(
     cachePath,
     '.hardhat_contract_sizer_output.json',
   );
+
+  // read results of previous runs from disk
 
   const previousSizes: { [sourceName: string]: number } = {};
   const previousInitSizes: { [sourceName: string]: number } = {};
@@ -60,37 +62,44 @@ export async function sizeContracts(
     });
   }
 
-  await Promise.all(
-    artifacts.map(async (artifact) => {
-      const { sourceName, deployedBytecode, bytecode } = artifact;
+  // filter artifacts according to configuration
+  // TODO: process does not match that of abi-exporter
 
-      if (config.only.length && !config.only.some((m) => sourceName.match(m)))
-        return;
-      if (
-        config.except.length &&
-        config.except.some((m) => sourceName.match(m))
-      )
-        return;
+  artifacts = artifacts.filter(({ sourceName }) => {
+    if (config.only.length && !config.only.some((m) => sourceName.match(m)))
+      return;
+    if (config.except.length && config.except.some((m) => sourceName.match(m)))
+      return;
+    return true;
+  });
 
-      const deploySize = Buffer.from(
-        deployedBytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
-        'hex',
-      ).length;
-      const initSize = Buffer.from(
-        bytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
-        'hex',
-      ).length;
+  // calculate contract sizes and match with data from previous runs
 
-      outputData.push({
-        sourceName,
-        displayName: config.flat ? sourceName.split(':').pop()! : sourceName,
-        deploySize,
-        previousDeploySize: previousSizes[sourceName],
-        initSize,
-        previousInitSize: previousInitSizes[sourceName],
-      });
-    }),
-  );
+  const outputData: Output = artifacts.map((artifact) => {
+    const { sourceName, deployedBytecode, bytecode } = artifact;
+
+    const deploySize = Buffer.from(
+      deployedBytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
+      'hex',
+    ).length;
+    const initSize = Buffer.from(
+      bytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
+      'hex',
+    ).length;
+
+    // TODO: displayName formatting is incorrect because fullName is not used here
+
+    return {
+      sourceName,
+      displayName: config.flat ? sourceName.split(':').pop()! : sourceName,
+      deploySize,
+      previousDeploySize: previousSizes[sourceName],
+      initSize,
+      previousInitSize: previousInitSizes[sourceName],
+    };
+  });
+
+  // check for display name clashes among contracts
 
   outputData.reduce((acc, { displayName }) => {
     if (acc.has(displayName)) {
@@ -104,6 +113,14 @@ export async function sizeContracts(
     return acc;
   }, new Set());
 
+  // write size results to disk for future comparison
+
+  await fs.promises.writeFile(outputPath, JSON.stringify(outputData), {
+    flag: 'w',
+  });
+
+  // sort results
+
   if (config.alphaSort) {
     outputData.sort((a, b) =>
       a.displayName.toUpperCase() > b.displayName.toUpperCase() ? 1 : -1,
@@ -112,9 +129,7 @@ export async function sizeContracts(
     outputData.sort((a, b) => a.deploySize - b.deploySize);
   }
 
-  await fs.promises.writeFile(outputPath, JSON.stringify(outputData), {
-    flag: 'w',
-  });
+  // generate table of results
 
   const table = new Table({
     style: { head: [], border: [], 'padding-left': 2, 'padding-right': 2 },
@@ -236,11 +251,15 @@ export async function sizeContracts(
     ]);
   }
 
+  // print table or write to disk, according to configuration
+
   if (config.outputFile) {
     fs.writeFileSync(config.outputFile, `${stripAnsi(table.toString())}\n`);
   } else {
     console.log(table.toString());
   }
+
+  // print or throw size errors, according to configuration
 
   if (oversizedContracts > 0) {
     const message = `Warning: ${oversizedContracts} contracts exceed the size limit for mainnet deployment (${formatSize(DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(INIT_SIZE_LIMIT)} ${config.unit} init).`;
