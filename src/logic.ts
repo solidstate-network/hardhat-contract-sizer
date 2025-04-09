@@ -82,7 +82,7 @@ export async function sizeContracts(
   // calculate contract sizes and match with data from previous runs
 
   const outputData: Output = artifacts.map((artifact) => {
-    const { sourceName, deployedBytecode, bytecode } = artifact;
+    const { sourceName, contractName, deployedBytecode, bytecode } = artifact;
 
     const deploySize = Buffer.from(
       deployedBytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
@@ -93,11 +93,9 @@ export async function sizeContracts(
       'hex',
     ).length;
 
-    // TODO: displayName formatting is incorrect because fullName is not used here
-
     return {
       sourceName,
-      displayName: config.flat ? sourceName.split(':').pop()! : sourceName,
+      displayName: config.flat ? sourceName : `${sourceName}:${contractName}`,
       deploySize,
       previousDeploySize: previousSizes[sourceName],
       initSize,
