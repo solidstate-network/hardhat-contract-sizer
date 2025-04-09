@@ -36,16 +36,12 @@ export default async (): Promise<Partial<ConfigHooks>> => ({
   },
 
   resolveUserConfig: async (userConfig, resolveConfigurationVariable, next) => {
-    const resolvedConfig = await next(userConfig, resolveConfigurationVariable);
-
-    const contractSizer = {
-      ...DEFAULT_CONFIG,
-      ...userConfig.contractSizer,
-    };
-
     return {
-      ...resolvedConfig,
-      contractSizer,
+      ...(await next(userConfig, resolveConfigurationVariable)),
+      contractSizer: {
+        ...DEFAULT_CONFIG,
+        ...userConfig.contractSizer,
+      },
     };
   },
 });
