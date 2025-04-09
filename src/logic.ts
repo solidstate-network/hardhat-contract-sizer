@@ -25,10 +25,6 @@ export async function sizeContracts(
   artifacts: Artifact<Abi>[],
   cachePath: string,
 ): Promise<void> {
-  if (!UNITS[config.unit]) {
-    throw new HardhatPluginError(pkg.name, `Invalid unit: ${config.unit}`);
-  }
-
   const formatSize = (size: number) => {
     const divisor = UNITS[config.unit];
     return (size / divisor).toFixed(3);
