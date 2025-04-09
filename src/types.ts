@@ -1,4 +1,4 @@
-export interface HardhatContractSizerConfig {
+export type HardhatContractSizerConfig = {
   alphaSort: boolean;
   runOnCompile: boolean;
   flat: boolean;
@@ -7,7 +7,7 @@ export interface HardhatContractSizerConfig {
   except: string[];
   outputFile?: string;
   unit: 'B' | 'kB' | 'KiB';
-}
+};
 
 export type HardhatContractSizerUserConfig =
   Partial<HardhatContractSizerConfig>;
