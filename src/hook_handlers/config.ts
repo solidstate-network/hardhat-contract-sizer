@@ -1,9 +1,20 @@
-import defaultConfig from '../config/default.js';
 import { UNITS } from '../logic.js';
+import { HardhatContractSizerConfig } from '../types.js';
 import type {
   ConfigHooks,
   HardhatUserConfigValidationError,
 } from 'hardhat/types/hooks';
+
+const DEFAULT_CONFIG: HardhatContractSizerConfig = {
+  alphaSort: false,
+  runOnCompile: false,
+  flat: false,
+  strict: false,
+  only: [],
+  except: [],
+  outputFile: undefined,
+  unit: 'KiB',
+};
 
 export default async (): Promise<Partial<ConfigHooks>> => ({
   validateUserConfig: async (userConfig) => {
@@ -28,7 +39,7 @@ export default async (): Promise<Partial<ConfigHooks>> => ({
     const resolvedConfig = await next(userConfig, resolveConfigurationVariable);
 
     const contractSizer = {
-      ...defaultConfig,
+      ...DEFAULT_CONFIG,
       ...userConfig.contractSizer,
     };
 
