@@ -4,11 +4,9 @@ import { globalOption, task } from 'hardhat/config';
 import { ArgumentType } from 'hardhat/types/arguments';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
 
-const pluginName = pkg.name;
-
 const plugin: HardhatPlugin = {
-  id: pluginName.split('/').pop()!,
-  npmPackage: pluginName!,
+  id: pkg.name.split('/').pop()!,
+  npmPackage: pkg.name!,
   tasks: [
     task('size-contracts')
       .setDescription('Output the size of compiled contracts')
