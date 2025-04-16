@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import Table from 'cli-table3';
 import fs from 'fs';
 import { HardhatPluginError } from 'hardhat/plugins';
-import { HookContext } from 'hardhat/types/hooks';
+import type { HookContext } from 'hardhat/types/hooks';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
 
