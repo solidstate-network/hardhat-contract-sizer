@@ -24,11 +24,6 @@ export const sizeContracts = async (
   context: HookContext,
   config: HardhatContractSizerConfig,
 ) => {
-  const formatSize = (size: number) => {
-    const divisor = UNITS[config.unit];
-    return (size / divisor).toFixed(3);
-  };
-
   type SolcSettings = {
     solcVersion: string;
     optimizer: boolean;
@@ -262,20 +257,20 @@ export const sizeContracts = async (
         continue;
       }
 
-      let deploySize = formatSize(item.deploySize);
-      let initSize = formatSize(item.initSize);
+      const formatSize = (size: number, limit?: number) => {
+        const divisor = UNITS[config.unit];
+        const decimalString = (size / divisor).toFixed(3);
 
-      if (item.deploySize > DEPLOYED_SIZE_LIMIT) {
-        deploySize = chalk.red.bold(deploySize);
-      } else if (item.deploySize > DEPLOYED_SIZE_LIMIT * 0.9) {
-        deploySize = chalk.yellow.bold(deploySize);
-      }
+        if (limit) {
+          if (size > limit) {
+            return chalk.red.bold(decimalString);
+          } else if (size > limit * 0.9) {
+            return chalk.yellow.bold(decimalString);
+          }
+        }
 
-      if (item.initSize > INIT_SIZE_LIMIT) {
-        initSize = chalk.red.bold(initSize);
-      } else if (item.initSize > INIT_SIZE_LIMIT * 0.9) {
-        initSize = chalk.yellow.bold(initSize);
-      }
+        return decimalString;
+      };
 
       const formatDiffString = (size: number, previousSize?: number) => {
         if (!previousSize) {
@@ -288,6 +283,9 @@ export const sizeContracts = async (
           return chalk.gray(formatSize(0));
         }
       };
+
+      const deploySize = formatSize(item.deploySize, DEPLOYED_SIZE_LIMIT);
+      const initSize = formatSize(item.initSize, INIT_SIZE_LIMIT);
 
       const deployDiff = formatDiffString(
         item.deploySize,
