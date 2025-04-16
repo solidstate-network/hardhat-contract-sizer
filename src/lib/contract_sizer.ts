@@ -272,7 +272,7 @@ export const sizeContracts = async (
         return decimalString;
       };
 
-      const formatDiffString = (size: number, previousSize?: number) => {
+      const formatSizeDiff = (size: number, previousSize?: number) => {
         if (!previousSize) {
           return '';
         } else if (size < previousSize) {
@@ -287,11 +287,11 @@ export const sizeContracts = async (
       const deploySize = formatSize(item.deploySize, DEPLOYED_SIZE_LIMIT);
       const initSize = formatSize(item.initSize, INIT_SIZE_LIMIT);
 
-      const deployDiff = formatDiffString(
+      const deployDiff = formatSizeDiff(
         item.deploySize,
         item.previousDeploySize,
       );
-      const initDiff = formatDiffString(item.initSize, item.previousInitSize);
+      const initDiff = formatSizeDiff(item.initSize, item.previousInitSize);
 
       table.push([
         { content: item.displayName },
