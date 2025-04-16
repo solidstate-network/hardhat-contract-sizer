@@ -20,6 +20,41 @@ export const UNITS: { [key in HardhatContractSizerConfig['unit']]: number } = {
   KiB: 1024,
 };
 
+const formatSize = (
+  unit: HardhatContractSizerConfig['unit'],
+  size: number,
+  limit?: number,
+) => {
+  const divisor = UNITS[unit];
+  const decimalString = (size / divisor).toFixed(3);
+
+  if (limit) {
+    if (size > limit) {
+      return chalk.red.bold(decimalString);
+    } else if (size > limit * 0.9) {
+      return chalk.yellow.bold(decimalString);
+    }
+  }
+
+  return decimalString;
+};
+
+const formatSizeDiff = (
+  unit: HardhatContractSizerConfig['unit'],
+  size: number,
+  previousSize?: number,
+) => {
+  if (!previousSize) {
+    return '';
+  } else if (size < previousSize) {
+    return chalk.green(`-${formatSize(unit, previousSize - size)}`);
+  } else if (size > previousSize) {
+    return chalk.red(`+${formatSize(unit, size - previousSize)}`);
+  } else {
+    return chalk.gray(formatSize(unit, 0));
+  }
+};
+
 export const sizeContracts = async (
   context: HookContext,
   config: HardhatContractSizerConfig,
@@ -257,41 +292,23 @@ export const sizeContracts = async (
         continue;
       }
 
-      const formatSize = (size: number, limit?: number) => {
-        const divisor = UNITS[config.unit];
-        const decimalString = (size / divisor).toFixed(3);
-
-        if (limit) {
-          if (size > limit) {
-            return chalk.red.bold(decimalString);
-          } else if (size > limit * 0.9) {
-            return chalk.yellow.bold(decimalString);
-          }
-        }
-
-        return decimalString;
-      };
-
-      const formatSizeDiff = (size: number, previousSize?: number) => {
-        if (!previousSize) {
-          return '';
-        } else if (size < previousSize) {
-          return chalk.green(`-${formatSize(previousSize - size)}`);
-        } else if (size > previousSize) {
-          return chalk.red(`+${formatSize(size - previousSize)}`);
-        } else {
-          return chalk.gray(formatSize(0));
-        }
-      };
-
-      const deploySize = formatSize(item.deploySize, DEPLOYED_SIZE_LIMIT);
-      const initSize = formatSize(item.initSize, INIT_SIZE_LIMIT);
+      const deploySize = formatSize(
+        config.unit,
+        item.deploySize,
+        DEPLOYED_SIZE_LIMIT,
+      );
+      const initSize = formatSize(config.unit, item.initSize, INIT_SIZE_LIMIT);
 
       const deployDiff = formatSizeDiff(
+        config.unit,
         item.deploySize,
         item.previousDeploySize,
       );
-      const initDiff = formatSizeDiff(item.initSize, item.previousInitSize);
+      const initDiff = formatSizeDiff(
+        config.unit,
+        item.initSize,
+        item.previousInitSize,
+      );
 
       table.push([
         { content: item.displayName },
@@ -323,7 +340,7 @@ export const sizeContracts = async (
   if (oversizedContracts > 0) {
     const fragment =
       oversizedContracts === 1 ? 'contract exceeds' : 'contracts exceed';
-    const message = `Warning: ${oversizedContracts} ${fragment} the size limit for mainnet deployment (${formatSize(DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(INIT_SIZE_LIMIT)} ${config.unit} init).`;
+    const message = `Warning: ${oversizedContracts} ${fragment} the size limit for mainnet deployment (${formatSize(config.unit, DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(config.unit, INIT_SIZE_LIMIT)} ${config.unit} init).`;
 
     if (config.strict) {
       throw new HardhatPluginError(pkg.name, message);
