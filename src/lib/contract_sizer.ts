@@ -20,10 +20,10 @@ export const UNITS: { [key in HardhatContractSizerConfig['unit']]: number } = {
   KiB: 1024,
 };
 
-export async function sizeContracts(
+export const sizeContracts = async (
   context: HookContext,
   config: HardhatContractSizerConfig,
-) {
+) => {
   const formatSize = (size: number) => {
     const divisor = UNITS[config.unit];
     return (size / divisor).toFixed(3);
@@ -345,4 +345,4 @@ export async function sizeContracts(
       console.log(chalk.red(message));
     }
   }
-}
+};
