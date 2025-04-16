@@ -235,8 +235,6 @@ export const sizeContracts = async (
     },
   ]);
 
-  let oversizedContracts = 0;
-
   for (const key in outputDataBySolcSettings) {
     const outputData = outputDataBySolcSettings[key];
 
@@ -266,13 +264,6 @@ export const sizeContracts = async (
 
       let deploySize = formatSize(item.deploySize);
       let initSize = formatSize(item.initSize);
-
-      if (
-        item.deploySize > DEPLOYED_SIZE_LIMIT ||
-        item.initSize > INIT_SIZE_LIMIT
-      ) {
-        oversizedContracts++;
-      }
 
       if (item.deploySize > DEPLOYED_SIZE_LIMIT) {
         deploySize = chalk.red.bold(deploySize);
@@ -332,6 +323,15 @@ export const sizeContracts = async (
   } else {
     console.log(table.toString());
   }
+
+  // count oversized contracts
+
+  const oversizedContracts = outputData.reduce((acc, el) => {
+    if (el.deploySize > DEPLOYED_SIZE_LIMIT || el.initSize > INIT_SIZE_LIMIT) {
+      acc++;
+    }
+    return acc;
+  }, 0);
 
   // print or throw size errors, according to configuration
 
