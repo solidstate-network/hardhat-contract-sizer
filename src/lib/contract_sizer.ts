@@ -277,36 +277,23 @@ export const sizeContracts = async (
         initSize = chalk.yellow.bold(initSize);
       }
 
-      let deployDiff = '';
-      let initDiff = '';
-
-      if (item.previousDeploySize) {
-        if (item.deploySize < item.previousDeploySize) {
-          deployDiff = chalk.green(
-            `-${formatSize(item.previousDeploySize - item.deploySize)}`,
-          );
-        } else if (item.deploySize > item.previousDeploySize) {
-          deployDiff = chalk.red(
-            `+${formatSize(item.deploySize - item.previousDeploySize)}`,
-          );
+      const formatDiffString = (size: number, previousSize?: number) => {
+        if (!previousSize) {
+          return '';
+        } else if (size < previousSize) {
+          return chalk.green(`-${formatSize(previousSize - size)}`);
+        } else if (size > previousSize) {
+          return chalk.red(`+${formatSize(size - previousSize)}`);
         } else {
-          deployDiff = chalk.gray(formatSize(0));
+          return chalk.gray(formatSize(0));
         }
-      }
+      };
 
-      if (item.previousInitSize) {
-        if (item.initSize < item.previousInitSize) {
-          initDiff = chalk.green(
-            `-${formatSize(item.previousInitSize - item.initSize)}`,
-          );
-        } else if (item.initSize > item.previousInitSize) {
-          initDiff = chalk.red(
-            `+${formatSize(item.initSize - item.previousInitSize)}`,
-          );
-        } else {
-          initDiff = chalk.gray(formatSize(0));
-        }
-      }
+      const deployDiff = formatDiffString(
+        item.deploySize,
+        item.previousDeploySize,
+      );
+      const initDiff = formatDiffString(item.initSize, item.previousInitSize);
 
       table.push([
         { content: item.displayName },
