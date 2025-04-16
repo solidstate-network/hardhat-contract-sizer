@@ -65,7 +65,7 @@ export const sizeContracts = async (
     runs: number;
   };
 
-  type Output = {
+  type OutputItem = {
     sourceName: string;
     displayName: string;
     deploySize: number;
@@ -73,7 +73,7 @@ export const sizeContracts = async (
     initSize: number;
     previousInitSize?: number;
     solcSettings: SolcSettings;
-  }[];
+  };
 
   const DEFAULT_SOLC_SETTINGS: SolcSettings = {
     solcVersion: 'unknown',
@@ -153,7 +153,7 @@ export const sizeContracts = async (
 
   // calculate contract sizes and match with data from previous runs
 
-  const outputData: Output = artifacts.map((artifact) => {
+  const outputData: OutputItem[] = artifacts.map((artifact) => {
     const {
       sourceName,
       contractName,
@@ -218,7 +218,7 @@ export const sizeContracts = async (
 
   // group results by solc settings
 
-  const outputDataBySolcSettings: { [solcVersion: string]: Output } =
+  const outputDataBySolcSettings: { [solcVersion: string]: OutputItem[] } =
     outputData.reduce(
       (acc, el) => {
         const key = JSON.stringify(el.solcSettings);
@@ -226,7 +226,7 @@ export const sizeContracts = async (
         acc[key].push(el);
         return acc;
       },
-      {} as { [solcVersion: string]: Output },
+      {} as { [solcVersion: string]: OutputItem[] },
     );
 
   // generate table of results
