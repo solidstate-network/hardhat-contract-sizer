@@ -10,7 +10,7 @@ const plugin: HardhatPlugin = {
   tasks: [
     task('size-contracts')
       .setDescription('Output the size of compiled contracts')
-      .setAction(import.meta.resolve('./tasks/size_contracts.js'))
+      .setAction(import.meta.resolve('./actions/size_contracts.js'))
       .addFlag({
         name: 'noCompile',
         description: "Don't compile before running this task",
