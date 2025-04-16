@@ -204,9 +204,7 @@ export const sizeContracts = async (
 
   // write size results to disk for future comparison
 
-  await fs.promises.writeFile(outputPath, JSON.stringify(outputData), {
-    flag: 'w',
-  });
+  await fs.promises.writeFile(outputPath, JSON.stringify(outputData));
 
   // sort results
 
