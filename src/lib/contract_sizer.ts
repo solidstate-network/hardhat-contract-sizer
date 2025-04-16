@@ -1,5 +1,5 @@
-import pkg from '../package.json';
-import type { HardhatContractSizerConfig } from './types.js';
+import pkg from '../../package.json';
+import type { HardhatContractSizerConfig } from '../types.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import fs from 'fs';

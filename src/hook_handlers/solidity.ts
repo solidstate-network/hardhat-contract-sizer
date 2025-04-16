@@ -1,4 +1,4 @@
-import { sizeContracts } from '../logic.js';
+import { sizeContracts } from '../lib/contract_sizer.js';
 import type { SolidityHooks } from 'hardhat/types/hooks';
 import path from 'path';
 

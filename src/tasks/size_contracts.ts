@@ -1,4 +1,4 @@
-import { sizeContracts } from '../logic.js';
+import { sizeContracts } from '../lib/contract_sizer.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 export interface SizeContractsActionArguments {

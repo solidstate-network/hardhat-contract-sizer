@@ -1,4 +1,4 @@
-import { UNITS } from '../logic.js';
+import { UNITS } from '../lib/contract_sizer.js';
 import { HardhatContractSizerConfig } from '../types.js';
 import type {
   ConfigHooks,
