@@ -336,7 +336,9 @@ export const sizeContracts = async (
   // print or throw size errors, according to configuration
 
   if (oversizedContracts > 0) {
-    const message = `Warning: ${oversizedContracts} contracts exceed the size limit for mainnet deployment (${formatSize(DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(INIT_SIZE_LIMIT)} ${config.unit} init).`;
+    const fragment =
+      oversizedContracts === 1 ? 'contract exceeds' : 'contracts exceed';
+    const message = `Warning: ${oversizedContracts} ${fragment} the size limit for mainnet deployment (${formatSize(DEPLOYED_SIZE_LIMIT)} ${config.unit} deployed, ${formatSize(INIT_SIZE_LIMIT)} ${config.unit} init).`;
 
     if (config.strict) {
       throw new HardhatPluginError(pkg.name, message);
