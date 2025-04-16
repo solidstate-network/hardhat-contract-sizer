@@ -1,6 +1,6 @@
 import pkg from '../package.json';
 import taskSizeContracts from './tasks/size_contracts.js';
-import './type-extensions.js';
+import './type_extensions.js';
 import { globalOption } from 'hardhat/config';
 import { ArgumentType } from 'hardhat/types/arguments';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
