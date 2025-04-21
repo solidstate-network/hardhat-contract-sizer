@@ -6,8 +6,11 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
   onCleanUpArtifacts: async (context, artifactPaths, next) => {
     const config = context.config.contractSizer;
 
-    // TODO: skip if solidity coverage running
-    if (config.runOnCompile && !context.globalOptions.noSizeContracts) {
+    if (
+      config.runOnCompile &&
+      !context.globalOptions.noSizeContracts &&
+      !context.globalOptions.coverage
+    ) {
       await sizeContracts(context, config);
     }
 

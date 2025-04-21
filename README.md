@@ -38,7 +38,7 @@ Add configuration under the `contractSizer` key:
 | `alphaSort`    | whether to sort results table alphabetically (default sort is by contract size)                                             | `false` |
 | `runOnCompile` | whether to output contract sizes automatically after compilation                                                            | `false` |
 | `flat`         | whether to hide the full path to the compilation artifact and output only the contract name                                 | `false` |
-| `strict`       | whether to throw an error if any contracts exceed the size limit (may cause compatibility issues with `solidity-coverage`)  | `false` |
+| `strict`       | whether to throw an error if any contracts exceed the size limit                                                            | `false` |
 | `only`         | `Array` of `String` matchers used to select included contracts, defaults to all contracts if `length` is 0                  | `[]`    |
 | `except`       | `Array` of `String` matchers used to exclude contracts                                                                      | `[]`    |
 | `outputFile`   | file path to write contract size report                                                                                     | `null`  |
