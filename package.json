@@ -31,13 +31,13 @@
     "src/"
   ],
   "peerDependencies": {
-    "hardhat": "3.0.0-next.4"
+    "hardhat": "^3.0.0-next.4"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.14.0",
-    "hardhat": "3.0.0-next.4",
+    "hardhat": "^3.0.0-next.4",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",

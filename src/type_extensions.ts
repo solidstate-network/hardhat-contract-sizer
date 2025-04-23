@@ -16,5 +16,7 @@ declare module 'hardhat/types/config' {
 declare module 'hardhat/types/global-options' {
   interface GlobalOptions {
     noSizeContracts: boolean;
+    // TODO: remove type once it's added by Hardhat
+    coverage: boolean;
   }
 }
