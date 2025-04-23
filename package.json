@@ -1,6 +1,6 @@
 {
   "name": "@solidstate/hardhat-contract-sizer",
-  "version": "3.0.0",
+  "version": "3.0.0-next.0",
   "license": "MIT",
   "description": "Output Solidity contract sizes with Hardhat",
   "keywords": [
