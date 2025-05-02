@@ -36,14 +36,14 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.14.0",
-    "hardhat": "^3.0.0-next.4",
+    "@types/node": "^22.15.3",
+    "hardhat": "^3.0.0-next.6",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.0",
+    "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
-    "prettier-plugin-solidity": "^1.4.2",
+    "prettier-plugin-solidity": "^2.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "chalk": "^5.4.1",
