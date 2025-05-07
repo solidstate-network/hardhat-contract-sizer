@@ -208,7 +208,6 @@ export const printContractSizes = (
     if (config.strict) {
       throw new HardhatPluginError(pkg.name, message);
     } else {
-      console.log();
       console.log(chalk.red(message));
     }
   }
