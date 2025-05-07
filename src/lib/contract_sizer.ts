@@ -83,11 +83,6 @@ export const sizeContracts = async (
     runs: 0,
   };
 
-  const outputPath = path.resolve(
-    context.config.paths.cache,
-    '.hardhat_contract_sizer_output.json',
-  );
-
   const artifacts = await getArtifacts(context, config);
 
   // get the solc settings used for each artifact, indexed by build info id
@@ -156,6 +151,11 @@ export const sizeContracts = async (
 
   // match with data from previous runs from disk
 
+  const outputPath = path.resolve(
+    context.config.paths.cache,
+    '.hardhat_contract_sizer_output.json',
+  );
+
   const previousSizes: { [sourceName: string]: number } = {};
   const previousInitSizes: { [sourceName: string]: number } = {};
 
@@ -177,6 +177,10 @@ export const sizeContracts = async (
     outputItem.previousInitSize = previousInitSizes[outputItem.sourceName];
   }
 
+  // write size results to disk for future comparison
+
+  await fs.promises.writeFile(outputPath, JSON.stringify(outputData));
+
   // check for display name clashes among contracts
 
   outputData.reduce((acc, { displayName }) => {
@@ -190,10 +194,6 @@ export const sizeContracts = async (
     acc.add(displayName);
     return acc;
   }, new Set());
-
-  // write size results to disk for future comparison
-
-  await fs.promises.writeFile(outputPath, JSON.stringify(outputData));
 
   // sort results
 
