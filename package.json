@@ -1,7 +1,6 @@
 {
   "name": "@solidstate/hardhat-contract-sizer",
   "version": "3.0.0-next.0",
-  "license": "MIT",
   "description": "Output Solidity contract sizes with Hardhat",
   "keywords": [
     "hardhat",
@@ -16,22 +15,25 @@
     "bytecode"
   ],
   "repository": "github:solidstate-network/hardhat-contract-sizer",
+  "license": "MIT",
   "author": "Nick Barry",
   "type": "module",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
+  "files": [
+    "dist/",
+    "src/"
+  ],
   "scripts": {
     "build": "yarn clean && tsc --build",
     "clean": "tsc --build --clean",
     "prepare": "husky",
     "prettier": "prettier --write ."
   },
-  "files": [
-    "dist/",
-    "src/"
-  ],
-  "peerDependencies": {
-    "hardhat": "^3.0.0-next.4"
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "cli-table3": "^0.6.5",
+    "strip-ansi": "^7.1.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
@@ -41,14 +43,13 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "prettier": "^3.5.3",
+    "prettier-plugin-packagejson": "^2.5.11",
     "prettier-plugin-solidity": "^2.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
-  "dependencies": {
-    "chalk": "^5.4.1",
-    "cli-table3": "^0.6.5",
-    "strip-ansi": "^7.1.0"
+  "peerDependencies": {
+    "hardhat": "^3.0.0-next.4"
   },
   "publishConfig": {
     "access": "public"
