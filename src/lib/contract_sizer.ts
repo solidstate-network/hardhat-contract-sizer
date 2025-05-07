@@ -88,24 +88,6 @@ export const sizeContracts = async (
     '.hardhat_contract_sizer_output.json',
   );
 
-  // read results of previous runs from disk
-
-  const previousSizes: { [sourceName: string]: number } = {};
-  const previousInitSizes: { [sourceName: string]: number } = {};
-
-  if (fs.existsSync(outputPath)) {
-    const previousOutput: {
-      sourceName: string;
-      deploySize: number;
-      initSize: number;
-    }[] = JSON.parse((await fs.promises.readFile(outputPath)).toString());
-
-    previousOutput.forEach((el) => {
-      previousSizes[el.sourceName] = el.deploySize;
-      previousInitSizes[el.sourceName] = el.initSize;
-    });
-  }
-
   const artifacts = await getArtifacts(context, config);
 
   // get the solc settings used for each artifact, indexed by build info id
@@ -172,7 +154,23 @@ export const sizeContracts = async (
     };
   });
 
-  // match with data from previous runs
+  // match with data from previous runs from disk
+
+  const previousSizes: { [sourceName: string]: number } = {};
+  const previousInitSizes: { [sourceName: string]: number } = {};
+
+  if (fs.existsSync(outputPath)) {
+    const previousOutput: {
+      sourceName: string;
+      deploySize: number;
+      initSize: number;
+    }[] = JSON.parse((await fs.promises.readFile(outputPath)).toString());
+
+    previousOutput.forEach((el) => {
+      previousSizes[el.sourceName] = el.deploySize;
+      previousInitSizes[el.sourceName] = el.initSize;
+    });
+  }
 
   for (const outputItem of outputData) {
     outputItem.previousDeploySize = previousSizes[outputItem.sourceName];
