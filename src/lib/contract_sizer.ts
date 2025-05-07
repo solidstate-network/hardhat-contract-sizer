@@ -10,7 +10,6 @@ import chalk from 'chalk';
 import fs from 'fs';
 import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
-import path from 'path';
 
 const getArtifacts = async (
   context: HookContext,
@@ -122,38 +121,6 @@ export const sizeContracts = async (
     }
     return acc;
   }, 0);
-
-  // match with data from previous runs from disk
-
-  const outputPath = path.resolve(
-    context.config.paths.cache,
-    '.hardhat_contract_sizer_output.json',
-  );
-
-  const previousSizes: { [sourceName: string]: number } = {};
-  const previousInitSizes: { [sourceName: string]: number } = {};
-
-  if (fs.existsSync(outputPath)) {
-    const previousOutput: {
-      sourceName: string;
-      deploySize: number;
-      initSize: number;
-    }[] = JSON.parse((await fs.promises.readFile(outputPath)).toString());
-
-    previousOutput.forEach((el) => {
-      previousSizes[el.sourceName] = el.deploySize;
-      previousInitSizes[el.sourceName] = el.initSize;
-    });
-  }
-
-  for (const outputItem of outputData) {
-    outputItem.previousDeploySize = previousSizes[outputItem.sourceName];
-    outputItem.previousInitSize = previousInitSizes[outputItem.sourceName];
-  }
-
-  // write size results to disk for future comparison
-
-  await fs.promises.writeFile(outputPath, JSON.stringify(outputData));
 
   // check for display name clashes among contracts
 
