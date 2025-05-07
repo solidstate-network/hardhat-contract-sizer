@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "chalk": "^5.4.1",
-    "cli-table3": "^0.6.5"
+    "cli-table3": "^0.6.5",
+    "simple-git": "^3.27.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
