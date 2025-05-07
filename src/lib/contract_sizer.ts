@@ -13,6 +13,31 @@ import type { HookContext } from 'hardhat/types/hooks';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
 
+const getArtifacts = async (
+  context: HookContext,
+  config: HardhatContractSizerConfig,
+) => {
+  // get list of all contracts and filter according to configuraiton
+
+  const fullNames = Array.from(
+    await context.artifacts.getAllFullyQualifiedNames(),
+  ).filter((fullName) => {
+    if (config.only.length && !config.only.some((m) => fullName.match(m)))
+      return false;
+    if (config.except.length && config.except.some((m) => fullName.match(m)))
+      return false;
+    return true;
+  });
+
+  // get contract artifacts
+
+  const artifacts = await Promise.all(
+    fullNames.map((fullName) => context.artifacts.readArtifact(fullName)),
+  );
+
+  return artifacts;
+};
+
 const formatSize = (
   unit: HardhatContractSizerConfig['unit'],
   size: number,
@@ -81,23 +106,7 @@ export const sizeContracts = async (
     });
   }
 
-  // get list of all contracts and filter according to configuraiton
-
-  const fullNames = Array.from(
-    await context.artifacts.getAllFullyQualifiedNames(),
-  ).filter((fullName) => {
-    if (config.only.length && !config.only.some((m) => fullName.match(m)))
-      return false;
-    if (config.except.length && config.except.some((m) => fullName.match(m)))
-      return false;
-    return true;
-  });
-
-  // get contract artifacts
-
-  const artifacts = await Promise.all(
-    fullNames.map((fullName) => context.artifacts.readArtifact(fullName)),
-  );
+  const artifacts = await getArtifacts(context, config);
 
   // get the solc settings used for each artifact, indexed by build info id
 
