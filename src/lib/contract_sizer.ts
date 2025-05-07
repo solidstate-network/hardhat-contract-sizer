@@ -142,6 +142,7 @@ export const sizeContracts = async (
 
     return {
       sourceName,
+      contractName,
       displayName: config.flat ? fullName.split('/').pop()! : fullName,
       deploySize,
       initSize,
