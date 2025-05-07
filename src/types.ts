@@ -20,8 +20,6 @@ export type OutputItem = {
   sourceName: string;
   contractName: string;
   deploySize: number;
-  previousDeploySize?: number;
   initSize: number;
-  previousInitSize?: number;
   solcSettings: SolcSettings;
 };

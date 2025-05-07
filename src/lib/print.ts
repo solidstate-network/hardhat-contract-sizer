@@ -171,15 +171,17 @@ export const printContractSizes = (
       );
       const initSize = formatSize(config.unit, item.initSize, INIT_SIZE_LIMIT);
 
+      // TODO: fix diffs
+
       const deployDiff = formatSizeDiff(
         config.unit,
         item.deploySize,
-        item.previousDeploySize,
+        item.deploySize,
       );
       const initDiff = formatSizeDiff(
         config.unit,
         item.initSize,
-        item.previousInitSize,
+        item.initSize,
       );
 
       table.push([
