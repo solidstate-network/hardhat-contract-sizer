@@ -206,18 +206,7 @@ export const sizeContracts = async (
     outputData.sort((a, b) => a.deploySize - b.deploySize);
   }
 
-  // group results by solc settings
-
-  const outputDataBySolcSettings: { [solcVersion: string]: OutputItem[] } =
-    outputData.reduce(
-      (acc, el) => {
-        const key = JSON.stringify(el.solcSettings);
-        acc[key] ??= [];
-        acc[key].push(el);
-        return acc;
-      },
-      {} as { [solcVersion: string]: OutputItem[] },
-    );
+  const outputDataBySolcSettings = groupOutputDataBySolcSettings(outputData);
 
   // generate table of results
 
@@ -341,4 +330,18 @@ export const sizeContracts = async (
       console.log(chalk.red(message));
     }
   }
+};
+
+const groupOutputDataBySolcSettings = (
+  outputData: OutputItem[],
+): { [solcVersion: string]: OutputItem[] } => {
+  return outputData.reduce(
+    (acc, el) => {
+      const key = JSON.stringify(el.solcSettings);
+      acc[key] ??= [];
+      acc[key].push(el);
+      return acc;
+    },
+    {} as { [solcVersion: string]: OutputItem[] },
+  );
 };
