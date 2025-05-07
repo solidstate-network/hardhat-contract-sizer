@@ -109,14 +109,14 @@ export const sizeContracts = async (
     };
   });
 
-  // count oversized contracts
+  return outputData;
+};
 
-  const oversizedCount = outputData.reduce((acc, el) => {
+export const countOversizedContracts = (sizedContracts: OutputItem[]) => {
+  return sizedContracts.reduce((acc, el) => {
     if (el.deploySize > DEPLOYED_SIZE_LIMIT || el.initSize > INIT_SIZE_LIMIT) {
       acc++;
     }
     return acc;
   }, 0);
-
-  printContractSizes(outputData, config, oversizedCount);
 };
