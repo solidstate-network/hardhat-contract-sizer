@@ -6,6 +6,14 @@ import chalk from 'chalk';
 import Table from 'cli-table3';
 import { HardhatPluginError } from 'hardhat/plugins';
 
+const formatDisplayName = (
+  { sourceName, contractName }: OutputItem,
+  flat: boolean,
+) => {
+  const fullyQualifiedName = `${sourceName}:${contractName}`;
+  return flat ? fullyQualifiedName.split('/').pop()! : fullyQualifiedName;
+};
+
 const formatSize = (
   unit: ContractSizerConfig['unit'],
   size: number,
@@ -49,18 +57,11 @@ export const printContractSizes = (
   // TODO: collate a and b output data
   // TODO: something not present in A should display -100% size diff
 
-  const getDisplayName = ({ sourceName, contractName }: OutputItem) => {
-    const fullyQualifiedName = `${sourceName}:${contractName}`;
-    return config.flat
-      ? fullyQualifiedName.split('/').pop()!
-      : fullyQualifiedName;
-  };
-
   // check for display name clashes among contracts
 
   if (config.flat) {
     outputData.reduce((acc, entry) => {
-      const displayName = getDisplayName(entry);
+      const displayName = formatDisplayName(entry, config.flat);
 
       if (acc.has(displayName)) {
         throw new HardhatPluginError(
@@ -94,7 +95,8 @@ export const printContractSizes = (
 
     if (config.alphaSort) {
       outputData.sort((a, b) =>
-        getDisplayName(a).toUpperCase() > getDisplayName(b).toUpperCase()
+        formatDisplayName(a, config.flat).toUpperCase() >
+        formatDisplayName(b, config.flat).toUpperCase()
           ? 1
           : -1,
       );
@@ -185,7 +187,7 @@ export const printContractSizes = (
       );
 
       table.push([
-        { content: getDisplayName(item) },
+        { content: formatDisplayName(item, config.flat) },
         { content: `${deploySize} (${deployDiff})`, hAlign: 'right' },
         { content: `${initSize} (${initDiff})`, hAlign: 'right' },
       ]);
