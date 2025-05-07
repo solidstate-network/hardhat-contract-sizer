@@ -15,13 +15,9 @@ import path from 'node:path';
 import { simpleGit } from 'simple-git';
 
 const getTmpHreAtGitRef = async (
-  hre: HardhatRuntimeEnvironment,
-  ref?: string,
+  hre: Pick<HardhatRuntimeEnvironment, 'config'>,
+  ref: string,
 ): Promise<HardhatRuntimeEnvironment> => {
-  if (!ref) {
-    return hre;
-  }
-
   const git = simpleGit(hre.config.paths.root);
   ref = await git.revparse(ref);
 
@@ -105,7 +101,16 @@ const getArtifacts = async (
 export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
+  ref?: string,
 ): Promise<OutputItem[]> => {
+  if (ref) {
+    const tmpHre = await getTmpHreAtGitRef(context, ref);
+
+    await tmpHre.tasks.getTask('compile').run();
+
+    context = tmpHre;
+  }
+
   return await loadContractSizesFromArtifacts(context, config);
 };
 
