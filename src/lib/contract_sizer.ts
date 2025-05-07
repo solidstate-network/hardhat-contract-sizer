@@ -105,7 +105,14 @@ const getArtifacts = async (
 export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
-) => {
+): Promise<OutputItem[]> => {
+  return await loadContractSizesFromArtifacts(context, config);
+};
+
+const loadContractSizesFromArtifacts = async (
+  context: HookContext,
+  config: ContractSizerConfig,
+): Promise<OutputItem[]> => {
   const DEFAULT_SOLC_SETTINGS: SolcSettings = {
     solcVersion: 'unknown',
     optimizer: false,
