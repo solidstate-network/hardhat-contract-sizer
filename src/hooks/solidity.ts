@@ -1,6 +1,5 @@
 import { loadContractSizes } from '../lib/contract_sizer.js';
 import type { SolidityHooks } from 'hardhat/types/hooks';
-import path from 'path';
 
 export default async (): Promise<Partial<SolidityHooks>> => ({
   onCleanUpArtifacts: async (context, artifactPaths, next) => {
