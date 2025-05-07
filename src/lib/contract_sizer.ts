@@ -102,7 +102,7 @@ const getArtifacts = async (
   return artifacts;
 };
 
-export const sizeContracts = async (
+export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
 ) => {

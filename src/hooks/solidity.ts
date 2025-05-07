@@ -1,4 +1,4 @@
-import { sizeContracts } from '../lib/contract_sizer.js';
+import { loadContractSizes } from '../lib/contract_sizer.js';
 import type { SolidityHooks } from 'hardhat/types/hooks';
 import path from 'path';
 
@@ -11,7 +11,7 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
       !context.globalOptions.noSizeContracts &&
       !context.globalOptions.coverage
     ) {
-      await sizeContracts(context, config);
+      await loadContractSizes(context, config);
     }
 
     return next(context, artifactPaths);
