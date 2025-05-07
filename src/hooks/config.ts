@@ -12,7 +12,6 @@ const DEFAULT_CONFIG: HardhatContractSizerConfig = {
   strict: false,
   only: [],
   except: [],
-  outputFile: undefined,
   unit: 'KiB',
 };
 

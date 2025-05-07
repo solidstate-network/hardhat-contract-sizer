@@ -135,13 +135,7 @@ export const printContractSizes = (
     }
   }
 
-  // print table or write to disk, according to configuration
-
-  if (config.outputFile) {
-    fs.writeFileSync(config.outputFile, `${stripAnsi(table.toString())}\n`);
-  } else {
-    console.log(table.toString());
-  }
+  console.log(table.toString());
 
   // print or throw size errors, according to configuration
 
@@ -156,7 +150,7 @@ export const printContractSizes = (
 
     if (config.strict) {
       throw new HardhatPluginError(pkg.name, message);
-    } else if (!config.outputFile) {
+    } else {
       console.log();
       console.log(chalk.red(message));
     }

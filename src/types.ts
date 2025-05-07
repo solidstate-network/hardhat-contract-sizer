@@ -5,7 +5,6 @@ export type HardhatContractSizerConfig = {
   strict: boolean;
   only: string[];
   except: string[];
-  outputFile?: string;
   unit: 'B' | 'kB' | 'KiB';
 };
 
