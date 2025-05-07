@@ -1,13 +1,10 @@
-import pkg from '../../package.json';
 import type {
   ContractSizerConfig,
   OutputItem,
   SolcSettings,
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
-import { printContractSizes } from './print.js';
 import fs from 'fs';
-import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
 
 const getArtifacts = async (
