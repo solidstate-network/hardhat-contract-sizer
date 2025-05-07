@@ -19,7 +19,6 @@ export type SolcSettings = {
 export type OutputItem = {
   sourceName: string;
   contractName: string;
-  displayName: string;
   deploySize: number;
   previousDeploySize?: number;
   initSize: number;

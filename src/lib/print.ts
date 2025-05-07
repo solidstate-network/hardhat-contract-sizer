@@ -42,10 +42,67 @@ const formatSizeDiff = (
 };
 
 export const printContractSizes = (
-  outputDataBySolcSettings: { [solcVersion: string]: OutputItem[] },
+  outputData: OutputItem[],
   config: ContractSizerConfig,
   oversizedCount: number,
 ) => {
+  // TODO: collate a and b output data
+  // TODO: something not present in A should display -100% size diff
+
+  const getDisplayName = ({ sourceName, contractName }: OutputItem) => {
+    const fullyQualifiedName = `${sourceName}:${contractName}`;
+    return config.flat
+      ? fullyQualifiedName.split('/').pop()!
+      : fullyQualifiedName;
+  };
+
+  // check for display name clashes among contracts
+
+  if (config.flat) {
+    outputData.reduce((acc, entry) => {
+      const displayName = getDisplayName(entry);
+
+      if (acc.has(displayName)) {
+        throw new HardhatPluginError(
+          pkg.name,
+          `ambiguous contract name: ${displayName}`,
+        );
+      }
+
+      acc.add(displayName);
+      return acc;
+    }, new Set());
+  }
+
+  // group contracts by compilation settings
+
+  const outputDataBySolcSettings: { [solcVersion: string]: OutputItem[] } =
+    outputData.reduce(
+      (acc, el) => {
+        const key = JSON.stringify(el.solcSettings);
+        acc[key] ??= [];
+        acc[key].push(el);
+        return acc;
+      },
+      {} as { [solcVersion: string]: OutputItem[] },
+    );
+
+  // sort each group of contracts
+
+  for (const key in outputDataBySolcSettings) {
+    const outputData = outputDataBySolcSettings[key];
+
+    if (config.alphaSort) {
+      outputData.sort((a, b) =>
+        getDisplayName(a).toUpperCase() > getDisplayName(b).toUpperCase()
+          ? 1
+          : -1,
+      );
+    } else {
+      outputData.sort((a, b) => a.deploySize - b.deploySize);
+    }
+  }
+
   // generate table of results
 
   const table = new Table({
@@ -126,7 +183,7 @@ export const printContractSizes = (
       );
 
       table.push([
-        { content: item.displayName },
+        { content: getDisplayName(item) },
         { content: `${deploySize} (${deployDiff})`, hAlign: 'right' },
         { content: `${initSize} (${initDiff})`, hAlign: 'right' },
       ]);
