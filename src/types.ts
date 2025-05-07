@@ -11,3 +11,19 @@ export type HardhatContractSizerConfig = {
 
 export type HardhatContractSizerUserConfig =
   Partial<HardhatContractSizerConfig>;
+
+export type SolcSettings = {
+  solcVersion: string;
+  optimizer: boolean;
+  runs: number;
+};
+
+export type OutputItem = {
+  sourceName: string;
+  displayName: string;
+  deploySize: number;
+  previousDeploySize?: number;
+  initSize: number;
+  previousInitSize?: number;
+  solcSettings: SolcSettings;
+};

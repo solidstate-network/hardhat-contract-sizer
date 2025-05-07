@@ -1,5 +1,9 @@
 import pkg from '../../package.json';
-import type { HardhatContractSizerConfig } from '../types.js';
+import type {
+  HardhatContractSizerConfig,
+  OutputItem,
+  SolcSettings,
+} from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
@@ -48,22 +52,6 @@ export const sizeContracts = async (
   context: HookContext,
   config: HardhatContractSizerConfig,
 ) => {
-  type SolcSettings = {
-    solcVersion: string;
-    optimizer: boolean;
-    runs: number;
-  };
-
-  type OutputItem = {
-    sourceName: string;
-    displayName: string;
-    deploySize: number;
-    previousDeploySize?: number;
-    initSize: number;
-    previousInitSize?: number;
-    solcSettings: SolcSettings;
-  };
-
   const DEFAULT_SOLC_SETTINGS: SolcSettings = {
     solcVersion: 'unknown',
     optimizer: false,
