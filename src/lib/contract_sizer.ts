@@ -6,7 +6,6 @@ import type {
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
 import { printContractSizes } from './print.js';
-import chalk from 'chalk';
 import fs from 'fs';
 import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
