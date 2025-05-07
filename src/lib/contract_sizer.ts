@@ -1,6 +1,6 @@
 import pkg from '../../package.json';
 import type {
-  HardhatContractSizerConfig,
+  ContractSizerConfig,
   OutputItem,
   SolcSettings,
 } from '../types.js';
@@ -12,7 +12,7 @@ import type { HookContext } from 'hardhat/types/hooks';
 
 const getArtifacts = async (
   context: HookContext,
-  config: HardhatContractSizerConfig,
+  config: ContractSizerConfig,
 ) => {
   // get list of all contracts and filter according to configuraiton
 
@@ -37,7 +37,7 @@ const getArtifacts = async (
 
 export const sizeContracts = async (
   context: HookContext,
-  config: HardhatContractSizerConfig,
+  config: ContractSizerConfig,
 ) => {
   const DEFAULT_SOLC_SETTINGS: SolcSettings = {
     solcVersion: 'unknown',

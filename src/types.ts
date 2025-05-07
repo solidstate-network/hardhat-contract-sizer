@@ -1,4 +1,4 @@
-export type HardhatContractSizerConfig = {
+export type ContractSizerConfig = {
   alphaSort: boolean;
   runOnCompile: boolean;
   flat: boolean;
@@ -8,8 +8,7 @@ export type HardhatContractSizerConfig = {
   unit: 'B' | 'kB' | 'KiB';
 };
 
-export type HardhatContractSizerUserConfig =
-  Partial<HardhatContractSizerConfig>;
+export type ContractSizerUserConfig = Partial<ContractSizerConfig>;
 
 export type SolcSettings = {
   solcVersion: string;

@@ -1,5 +1,5 @@
 import pkg from '../../package.json';
-import type { HardhatContractSizerConfig } from '../types.js';
+import type { ContractSizerConfig } from '../types.js';
 import type { OutputItem, SolcSettings } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
 import chalk from 'chalk';
@@ -7,7 +7,7 @@ import Table from 'cli-table3';
 import { HardhatPluginError } from 'hardhat/plugins';
 
 const formatSize = (
-  unit: HardhatContractSizerConfig['unit'],
+  unit: ContractSizerConfig['unit'],
   size: number,
   limit?: number,
 ) => {
@@ -26,7 +26,7 @@ const formatSize = (
 };
 
 const formatSizeDiff = (
-  unit: HardhatContractSizerConfig['unit'],
+  unit: ContractSizerConfig['unit'],
   size: number,
   previousSize?: number,
 ) => {
@@ -43,7 +43,7 @@ const formatSizeDiff = (
 
 export const printContractSizes = (
   outputDataBySolcSettings: { [solcVersion: string]: OutputItem[] },
-  config: HardhatContractSizerConfig,
+  config: ContractSizerConfig,
   oversizedCount: number,
 ) => {
   // generate table of results

@@ -1,4 +1,4 @@
-import type { HardhatContractSizerConfig } from '../types.js';
+import type { ContractSizerConfig } from '../types.js';
 
 // see EIPs 170 and 3860 for more information
 // https://eips.ethereum.org/EIPS/eip-170
@@ -6,7 +6,7 @@ import type { HardhatContractSizerConfig } from '../types.js';
 export const DEPLOYED_SIZE_LIMIT = 24576;
 export const INIT_SIZE_LIMIT = 49152;
 
-export const UNITS: { [key in HardhatContractSizerConfig['unit']]: number } = {
+export const UNITS: { [key in ContractSizerConfig['unit']]: number } = {
   B: 1,
   kB: 1000,
   KiB: 1024,
