@@ -1,5 +1,6 @@
 import pkg from '../../package.json';
 import type { HardhatContractSizerConfig } from '../types.js';
+import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import fs from 'fs';
@@ -7,18 +8,6 @@ import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
 import path from 'path';
 import stripAnsi from 'strip-ansi';
-
-// see EIPs 170 and 3860 for more information
-// https://eips.ethereum.org/EIPS/eip-170
-// https://eips.ethereum.org/EIPS/eip-3860
-const DEPLOYED_SIZE_LIMIT = 24576;
-const INIT_SIZE_LIMIT = 49152;
-
-export const UNITS: { [key in HardhatContractSizerConfig['unit']]: number } = {
-  B: 1,
-  kB: 1000,
-  KiB: 1024,
-};
 
 const formatSize = (
   unit: HardhatContractSizerConfig['unit'],
