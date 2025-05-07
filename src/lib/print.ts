@@ -5,8 +5,6 @@ import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import { HardhatPluginError } from 'hardhat/plugins';
-import fs from 'node:fs';
-import stripAnsi from 'strip-ansi';
 
 const formatSize = (
   unit: HardhatContractSizerConfig['unit'],
