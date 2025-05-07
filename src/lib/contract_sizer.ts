@@ -140,7 +140,7 @@ export const sizeContracts = async (
     }),
   );
 
-  // calculate contract sizes and match with data from previous runs
+  // calculate contract sizes
 
   const outputData: OutputItem[] = artifacts.map((artifact) => {
     const {
@@ -170,12 +170,17 @@ export const sizeContracts = async (
       sourceName,
       displayName: config.flat ? fullName.split('/').pop()! : fullName,
       deploySize,
-      previousDeploySize: previousSizes[sourceName],
       initSize,
-      previousInitSize: previousInitSizes[sourceName],
       solcSettings,
     };
   });
+
+  // match with data from previous runs
+
+  for (const outputItem of outputData) {
+    outputItem.previousDeploySize = previousSizes[outputItem.sourceName];
+    outputItem.previousInitSize = previousInitSizes[outputItem.sourceName];
+  }
 
   // check for display name clashes among contracts
 
