@@ -18,16 +18,12 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 ) => {
   if (hre.globalOptions.noSizeContracts) return;
 
-  if (!args.noCompile) {
-    hre.globalOptions.noSizeContracts = true;
-    await hre.tasks.getTask(TASK_COMPILE).run();
-  }
-
   if (args.ref) {
     hre = await getTmpHreAtGitRef(hre, args.ref);
   }
 
   if (!args.noCompile) {
+    hre.globalOptions.noSizeContracts = true;
     await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
