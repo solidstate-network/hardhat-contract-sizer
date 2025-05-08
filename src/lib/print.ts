@@ -340,7 +340,7 @@ export const printContractSizesDiff = (
 
   console.log(table.toString());
 
-  // print or throw size errors, according to configuration
+  // print size warning
 
   if (oversizedCount > 0) {
     const subjectPredicateFragment =
