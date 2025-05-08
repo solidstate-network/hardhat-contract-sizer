@@ -16,7 +16,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { simpleGit } from 'simple-git';
 
-const getTmpHreAtGitRef = async (
+export const getTmpHreAtGitRef = async (
   hre: Pick<HardhatRuntimeEnvironment, 'config'>,
   ref: string,
 ): Promise<HardhatRuntimeEnvironment> => {
@@ -103,19 +103,7 @@ const getArtifacts = async (
 export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
-  ref?: string,
-  noCompile: boolean = false,
 ): Promise<OutputItem[]> => {
-  if (ref) {
-    const tmpHre = await getTmpHreAtGitRef(context, ref);
-
-    if (!noCompile) {
-      await tmpHre.tasks.getTask(TASK_COMPILE).run();
-    }
-
-    context = tmpHre;
-  }
-
   return await loadContractSizesFromArtifacts(context, config);
 };
 

@@ -1,5 +1,6 @@
 import {
   countOversizedContracts,
+  getTmpHreAtGitRef,
   loadContractSizes,
 } from '../lib/contract_sizer.js';
 import { printContractSizes } from '../lib/print.js';
@@ -22,12 +23,15 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
     await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
-  const sizedContracts = await loadContractSizes(
-    hre,
-    hre.config.contractSizer,
-    args.ref,
-    args.noCompile,
-  );
+  if (args.ref) {
+    hre = await getTmpHreAtGitRef(hre, args.ref);
+  }
+
+  if (!args.noCompile) {
+    await hre.tasks.getTask(TASK_COMPILE).run();
+  }
+
+  const sizedContracts = await loadContractSizes(hre, hre.config.contractSizer);
 
   const oversizedCount = countOversizedContracts(sizedContracts);
 
