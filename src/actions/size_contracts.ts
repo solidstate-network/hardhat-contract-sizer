@@ -5,12 +5,12 @@ import {
 import { printContractSizes } from '../lib/print.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
-export interface SizeContractsActionArguments {
+interface TaskActionArguments {
   ref?: string;
   noCompile: boolean;
 }
 
-const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
+const action: NewTaskActionFunction<TaskActionArguments> = async (
   args,
   hre,
 ) => {
