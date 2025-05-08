@@ -19,23 +19,23 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 ) => {
   if (hre.globalOptions.noSizeContracts) return;
 
-  if (!args.noCompile) {
+  if (!args.noCompile && !args.refB) {
     hre.globalOptions.noSizeContracts = true;
     await hre.tasks.getTask(TASK_COMPILE).run();
   }
-
-  // TODO: ref is not compatible with --no-compile option
 
   const sizedContractsA = await loadContractSizes(
     hre,
     hre.config.contractSizer,
     args.refA,
+    args.noCompile,
   );
 
   const sizedContractsB = await loadContractSizes(
     hre,
     hre.config.contractSizer,
     args.refB,
+    args.noCompile,
   );
 
   const mergedContractSizes = mergeContractSizes(

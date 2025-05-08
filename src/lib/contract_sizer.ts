@@ -104,11 +104,14 @@ export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
   ref?: string,
+  noCompile: boolean = false,
 ): Promise<OutputItem[]> => {
   if (ref) {
     const tmpHre = await getTmpHreAtGitRef(context, ref);
 
-    await tmpHre.tasks.getTask(TASK_COMPILE).run();
+    if (!noCompile) {
+      await tmpHre.tasks.getTask(TASK_COMPILE).run();
+    }
 
     context = tmpHre;
   }

@@ -22,12 +22,11 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
     await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
-  // TODO: ref is not compatible with --no-compile option
-
   const sizedContracts = await loadContractSizes(
     hre,
     hre.config.contractSizer,
     args.ref,
+    args.noCompile,
   );
 
   const oversizedCount = countOversizedContracts(sizedContracts);
