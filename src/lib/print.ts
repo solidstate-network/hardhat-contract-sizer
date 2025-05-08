@@ -1,5 +1,5 @@
 import pkg from '../../package.json';
-import type { ContractSizerConfig } from '../types.js';
+import type { ContractSizerConfig, MergedOutputItem } from '../types.js';
 import type { OutputItem, SolcSettings } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
 import chalk from 'chalk';
@@ -173,17 +173,169 @@ export const printContractSizes = (
       );
       const initSize = formatSize(config.unit, item.initSize, INIT_SIZE_LIMIT);
 
-      // TODO: fix diffs
+      table.push([
+        { content: formatDisplayName(item, config.flat) },
+        { content: deploySize, hAlign: 'right' },
+        { content: initSize, hAlign: 'right' },
+      ]);
+    }
+  }
+
+  console.log(table.toString());
+
+  // print or throw size errors, according to configuration
+
+  if (oversizedCount > 0) {
+    const subjectPredicateFragment =
+      oversizedCount === 1 ? 'contract exceeds' : 'contracts exceed';
+
+    const deployedSizeLimitFragment = `${formatSize(config.unit, DEPLOYED_SIZE_LIMIT)} ${config.unit}`;
+    const initSizeLimitFragment = `${formatSize(config.unit, INIT_SIZE_LIMIT)} ${config.unit}`;
+
+    const message = `Warning: ${oversizedCount} ${subjectPredicateFragment} the size limit for mainnet deployment (${deployedSizeLimitFragment} deployed, ${initSizeLimitFragment} init).`;
+
+    if (config.strict) {
+      throw new HardhatPluginError(pkg.name, message);
+    } else {
+      console.log(chalk.red(message));
+    }
+  }
+};
+
+export const printContractSizesDiff = (
+  outputData: MergedOutputItem[],
+  config: ContractSizerConfig,
+  oversizedCount: number,
+) => {
+  // TODO: collate a and b output data
+  // TODO: something not present in A should display -100% size diff
+
+  // check for display name clashes among contracts
+
+  if (config.flat) {
+    outputData.reduce((acc, entry) => {
+      const displayName = formatDisplayName(entry, config.flat);
+
+      if (acc.has(displayName)) {
+        throw new HardhatPluginError(
+          pkg.name,
+          `ambiguous contract name: ${displayName}`,
+        );
+      }
+
+      acc.add(displayName);
+      return acc;
+    }, new Set());
+  }
+
+  // group contracts by compilation settings
+
+  const outputDataBySolcSettings: {
+    [solcVersion: string]: MergedOutputItem[];
+  } = outputData.reduce(
+    (acc, el) => {
+      const key = JSON.stringify(el.solcSettings);
+      acc[key] ??= [];
+      acc[key].push(el);
+      return acc;
+    },
+    {} as { [solcVersion: string]: MergedOutputItem[] },
+  );
+
+  // sort each group of contracts
+
+  for (const key in outputDataBySolcSettings) {
+    const outputData = outputDataBySolcSettings[key];
+
+    if (config.alphaSort) {
+      outputData.sort((a, b) =>
+        formatDisplayName(a, config.flat).toUpperCase() >
+        formatDisplayName(b, config.flat).toUpperCase()
+          ? 1
+          : -1,
+      );
+    } else {
+      outputData.sort((a, b) => a.deploySize - b.deploySize);
+    }
+  }
+
+  // generate table of results
+
+  const table = new Table({
+    style: { head: [], border: [], 'padding-left': 2, 'padding-right': 2 },
+    chars: {
+      mid: '·',
+      'top-mid': '|',
+      'left-mid': ' ·',
+      'mid-mid': '|',
+      'right-mid': '·',
+      left: ' |',
+      'top-left': ' ·',
+      'top-right': '·',
+      'bottom-left': ' ·',
+      'bottom-right': '·',
+      middle: '·',
+      top: '-',
+      bottom: '-',
+      'bottom-mid': '|',
+    },
+  });
+
+  table.push([
+    {
+      content: chalk.bold('Contract Name'),
+    },
+    {
+      content: chalk.bold(`Deployed size (${config.unit}) (change)`),
+    },
+    {
+      content: chalk.bold(`Initcode size (${config.unit}) (change)`),
+    },
+  ]);
+
+  for (const key in outputDataBySolcSettings) {
+    const outputData = outputDataBySolcSettings[key];
+
+    const solcSettings: SolcSettings = JSON.parse(key) as SolcSettings;
+
+    const { solcVersion } = solcSettings;
+    const optimizer =
+      solcVersion === 'unknown' ? 'unknown' : solcSettings.optimizer;
+    const runs = solcVersion === 'unknown' ? 'unknown' : solcSettings.runs;
+
+    table.push([
+      {
+        content: chalk.gray(`Solc version: ${solcVersion}`),
+      },
+      {
+        content: chalk.gray(`Optimizer enabled: ${optimizer}`),
+      },
+      {
+        content: chalk.gray(`Runs: ${runs}`),
+      },
+    ]);
+
+    for (let item of outputData) {
+      if (item.deploySize === 0 && item.initSize === 0) {
+        continue;
+      }
+
+      const deploySize = formatSize(
+        config.unit,
+        item.deploySize,
+        DEPLOYED_SIZE_LIMIT,
+      );
+      const initSize = formatSize(config.unit, item.initSize, INIT_SIZE_LIMIT);
 
       const deployDiff = formatSizeDiff(
         config.unit,
         item.deploySize,
-        item.deploySize,
+        item.previousDeploySize,
       );
       const initDiff = formatSizeDiff(
         config.unit,
         item.initSize,
-        item.initSize,
+        item.previousInitSize,
       );
 
       table.push([
