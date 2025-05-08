@@ -1,4 +1,5 @@
 import pkg from '../../package.json';
+import { TASK_COMPILE } from '../task_names.js';
 import type {
   ContractSizerConfig,
   MergedOutputItem,
@@ -107,7 +108,7 @@ export const loadContractSizes = async (
   if (ref) {
     const tmpHre = await getTmpHreAtGitRef(context, ref);
 
-    await tmpHre.tasks.getTask('compile').run();
+    await tmpHre.tasks.getTask(TASK_COMPILE).run();
 
     context = tmpHre;
   }

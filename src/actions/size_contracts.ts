@@ -3,6 +3,7 @@ import {
   loadContractSizes,
 } from '../lib/contract_sizer.js';
 import { printContractSizes } from '../lib/print.js';
+import { TASK_COMPILE } from '../task_names.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
@@ -17,9 +18,8 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
   if (hre.globalOptions.noSizeContracts) return;
 
   if (!args.noCompile) {
-    // TODO: will task names no longer be stored in constants?
     hre.globalOptions.noSizeContracts = true;
-    await hre.tasks.getTask('compile').run();
+    await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
   // TODO: ref is not compatible with --no-compile option

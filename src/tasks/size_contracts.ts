@@ -1,7 +1,8 @@
+import { TASK_SIZE_CONTRACTS } from '../task_names.js';
 import { task } from 'hardhat/config';
 import { ArgumentType } from 'hardhat/types/arguments';
 
-export default task('size-contracts')
+export default task(TASK_SIZE_CONTRACTS)
   .setDescription('Output the size of compiled contracts')
   .setAction(import.meta.resolve('../actions/size_contracts.js'))
   .addOption({

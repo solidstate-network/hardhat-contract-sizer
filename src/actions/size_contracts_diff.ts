@@ -5,7 +5,7 @@ import {
   mergeContractSizes,
 } from '../lib/contract_sizer.js';
 import { printContractSizesDiff } from '../lib/print.js';
-import { HardhatPluginError } from 'hardhat/plugins';
+import { TASK_COMPILE } from '../task_names.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
@@ -20,9 +20,8 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
   if (hre.globalOptions.noSizeContracts) return;
 
   if (!args.noCompile) {
-    // TODO: will task names no longer be stored in constants?
     hre.globalOptions.noSizeContracts = true;
-    await hre.tasks.getTask('compile').run();
+    await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
   const refs = [...args.refs];
