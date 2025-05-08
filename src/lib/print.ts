@@ -52,9 +52,6 @@ export const printContractSizes = (
   config: ContractSizerConfig,
   oversizedCount: number,
 ) => {
-  // TODO: collate a and b output data
-  // TODO: something not present in A should display -100% size diff
-
   // check for display name clashes among contracts
 
   if (config.flat) {
@@ -205,9 +202,6 @@ export const printContractSizesDiff = (
   config: ContractSizerConfig,
   oversizedCount: number,
 ) => {
-  // TODO: collate a and b output data
-  // TODO: something not present in A should display -100% size diff
-
   // check for display name clashes among contracts
 
   if (config.flat) {
