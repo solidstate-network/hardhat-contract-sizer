@@ -1,4 +1,3 @@
-import pkg from '../../package.json';
 import {
   countOversizedContracts,
   loadContractSizes,
@@ -9,7 +8,8 @@ import { TASK_COMPILE } from '../task_names.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
-  refs: string[];
+  refA: string;
+  refB: string;
   noCompile: boolean;
 }
 
@@ -24,29 +24,18 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
     await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
-  const refs = [...args.refs];
-
-  if (refs.length === 0) {
-    refs.push('HEAD');
-  } else if (refs.length > 2) {
-    // TODO: throw error
-    throw new HardhatPluginError(
-      pkg.name,
-      'A maximum of two refs may be specified',
-    );
-  }
   // TODO: ref is not compatible with --no-compile option
 
   const sizedContractsA = await loadContractSizes(
     hre,
     hre.config.contractSizer,
-    refs[0],
+    args.refA,
   );
 
   const sizedContractsB = await loadContractSizes(
     hre,
     hre.config.contractSizer,
-    refs[1],
+    args.refB,
   );
 
   const mergedContractSizes = mergeContractSizes(
