@@ -1,6 +1,7 @@
 import pkg from '../../package.json';
 import type {
   ContractSizerConfig,
+  MergedOutputItem,
   OutputItem,
   SolcSettings,
 } from '../types.js';
@@ -189,6 +190,67 @@ const loadContractSizesFromArtifacts = async (
   });
 
   return outputData;
+};
+
+export const mergeContractSizes = (
+  contractSizesA: OutputItem[],
+  contractSizesB: OutputItem[],
+): MergedOutputItem[] => {
+  // contractSizesB represents the updated revision
+  // contractSizesA represents the previous revision
+
+  const contractSizesAByName = contractSizesA.reduce(
+    (acc, el) => {
+      const name = `${el.sourceName}:${el.contractName}`;
+      acc[name] = el;
+      return acc;
+    },
+    {} as { [name: string]: OutputItem },
+  );
+
+  const contractSizesBByName = contractSizesB.reduce(
+    (acc, el) => {
+      const name = `${el.sourceName}:${el.contractName}`;
+      acc[name] = el;
+      return acc;
+    },
+    {} as { [name: string]: OutputItem },
+  );
+
+  const mergedContractSizesByName: { [name: string]: MergedOutputItem } = {};
+
+  for (const name in contractSizesBByName) {
+    const itemA = contractSizesAByName[name];
+    const itemB = contractSizesBByName[name] ?? { deploySize: 0, initSize: 0 };
+
+    mergedContractSizesByName[name] = {
+      ...itemB,
+      previousDeploySize: itemA.deploySize,
+      previousInitSize: itemA.initSize,
+    };
+  }
+
+  for (const name in contractSizesAByName) {
+    const item = mergedContractSizesByName[name];
+
+    if (!item) {
+      const itemA = contractSizesAByName[name];
+
+      // TODO: solc settings are not applicable because contract does not exist in current revision
+
+      mergedContractSizesByName[name] = {
+        sourceName: itemA.sourceName,
+        contractName: itemA.contractName,
+        deploySize: 0,
+        initSize: 0,
+        previousDeploySize: itemA.deploySize,
+        previousInitSize: itemA.initSize,
+        solcSettings: itemA.solcSettings,
+      };
+    }
+  }
+
+  return Object.values(mergedContractSizesByName);
 };
 
 export const countOversizedContracts = (sizedContracts: OutputItem[]) => {

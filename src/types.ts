@@ -23,3 +23,8 @@ export type OutputItem = {
   initSize: number;
   solcSettings: SolcSettings;
 };
+
+export type MergedOutputItem = OutputItem & {
+  previousDeploySize: number;
+  previousInitSize: number;
+};
