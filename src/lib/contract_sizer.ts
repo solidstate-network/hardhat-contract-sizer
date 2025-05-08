@@ -220,8 +220,8 @@ export const mergeContractSizes = (
   const mergedContractSizesByName: { [name: string]: MergedOutputItem } = {};
 
   for (const name in contractSizesBByName) {
-    const itemA = contractSizesAByName[name];
-    const itemB = contractSizesBByName[name] ?? { deploySize: 0, initSize: 0 };
+    const itemA = contractSizesAByName[name] ?? { deploySize: 0, initSize: 0 };
+    const itemB = contractSizesBByName[name];
 
     mergedContractSizesByName[name] = {
       ...itemB,
