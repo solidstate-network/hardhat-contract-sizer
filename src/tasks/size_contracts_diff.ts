@@ -14,4 +14,8 @@ export default task(TASK_SIZE_CONTRACTS_DIFF)
     description: 'Current git reference to compare',
     defaultValue: '',
   })
+  .addFlag({
+    name: 'noCompile',
+    description: "Don't compile before running this task",
+  })
   .build();
