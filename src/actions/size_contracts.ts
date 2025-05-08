@@ -6,6 +6,7 @@ import { printContractSizes } from '../lib/print.js';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 export interface SizeContractsActionArguments {
+  ref?: string;
   noCompile: boolean;
 }
 
@@ -21,7 +22,13 @@ const action: NewTaskActionFunction<SizeContractsActionArguments> = async (
     await hre.tasks.getTask('compile').run();
   }
 
-  const sizedContracts = await loadContractSizes(hre, hre.config.contractSizer);
+  // TODO: ref is not compatible with --no-compile option
+
+  const sizedContracts = await loadContractSizes(
+    hre,
+    hre.config.contractSizer,
+    args.ref,
+  );
 
   const oversizedCount = countOversizedContracts(sizedContracts);
 
