@@ -1,5 +1,4 @@
 import pkg from '../../package.json';
-import { TASK_COMPILE } from '../task_names.js';
 import type {
   ContractSizerConfig,
   MergedOutputItem,
