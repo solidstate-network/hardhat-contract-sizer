@@ -18,7 +18,7 @@ const formatSize = (
   unit: ContractSizerConfig['unit'],
   size: number,
   limit?: number,
-) => {
+): string => {
   const divisor = UNITS[unit];
   const decimalString = (size / divisor).toFixed(3);
 
@@ -36,11 +36,9 @@ const formatSize = (
 const formatSizeDiff = (
   unit: ContractSizerConfig['unit'],
   size: number,
-  previousSize?: number,
-) => {
-  if (!previousSize) {
-    return '';
-  } else if (size < previousSize) {
+  previousSize: number,
+): string => {
+  if (size < previousSize) {
     return chalk.green(`-${formatSize(unit, previousSize - size)}`);
   } else if (size > previousSize) {
     return chalk.red(`+${formatSize(unit, size - previousSize)}`);
