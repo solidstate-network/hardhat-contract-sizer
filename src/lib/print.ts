@@ -351,10 +351,6 @@ export const printContractSizesDiff = (
 
     const message = `Warning: ${oversizedCount} ${subjectPredicateFragment} the size limit for mainnet deployment (${deployedSizeLimitFragment} deployed, ${initSizeLimitFragment} init).`;
 
-    if (config.strict) {
-      throw new HardhatPluginError(pkg.name, message);
-    } else {
-      console.log(chalk.red(message));
-    }
+    console.log(chalk.red(message));
   }
 };
