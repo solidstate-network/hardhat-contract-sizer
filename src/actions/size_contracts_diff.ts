@@ -1,11 +1,11 @@
 import {
   countOversizedContracts,
-  getTmpHreAtGitRef,
   loadContractSizes,
   mergeContractSizes,
 } from '../lib/contract_sizer.js';
 import { printContractSizesDiff } from '../lib/print.js';
 import { TASK_COMPILE } from '../task_names.js';
+import { createHardhatRuntimeEnvironmentAtGitRef } from '@solidstate/hardhat-git';
 import { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
@@ -20,9 +20,13 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 ) => {
   if (hre.globalOptions.noSizeContracts) return;
 
-  const hreRefA = await getTmpHreAtGitRef(hre, args.refA);
+  // TODO: npmInstall parameter
 
-  const hreRefB = args.refB ? await getTmpHreAtGitRef(hre, args.refB) : hre;
+  const hreRefA = await createHardhatRuntimeEnvironmentAtGitRef(hre, args.refA);
+
+  const hreRefB = args.refB
+    ? await createHardhatRuntimeEnvironmentAtGitRef(hre, args.refB)
+    : hre;
 
   if (!args.noCompile) {
     await hreRefA.tasks.getTask(TASK_COMPILE).run();

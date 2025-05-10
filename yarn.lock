@@ -837,6 +837,16 @@
   resolved "https://registry.yarnpkg.com/@solidity-parser/parser/-/parser-0.20.1.tgz#88efee3e0946a4856ed10355017692db9c259ff4"
   integrity sha512-58I2sRpzaQUN+jJmWbHfbWf9AKfzqCI8JAdFB0vbyY+u8tBRcuTt9LxzasvR0LGQpcRv97eyV7l61FQ3Ib7zVw==
 
+"@solidstate/hardhat-git@^1.0.0-next.1":
+  version "1.0.0-next.1"
+  resolved "https://registry.yarnpkg.com/@solidstate/hardhat-git/-/hardhat-git-1.0.0-next.1.tgz#332aa1b360f7f044f89346c3c78cf387d20a040d"
+  integrity sha512-FMwxFukmA913uHkez0vsbGndydn50UjakGlldFyTcXOTq0HjqCPbaM9PK2LwgIgg8mpme91B3Ud1mqgx2cmu1w==
+  dependencies:
+    chalk "^5.4.1"
+    cli-table3 "^0.6.5"
+    package-manager-detector "^1.3.0"
+    simple-git "^3.27.0"
+
 "@streamparser/json-node@^0.0.22":
   version "0.0.22"
   resolved "https://registry.yarnpkg.com/@streamparser/json-node/-/json-node-0.0.22.tgz#cee66bb2f175e41abf83574dc7d6fe9c997d94d5"
@@ -1490,6 +1500,11 @@ p-map@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/p-map/-/p-map-7.0.3.tgz#7ac210a2d36f81ec28b736134810f7ba4418cdb6"
   integrity sha512-VkndIv2fIB99swvQoA65bm+fsmt6UNdGeIB0oxBs+WhAhdh08QA04JXpI7rbB9r08/nkbysKoya9rtDERYOYMA==
+
+package-manager-detector@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/package-manager-detector/-/package-manager-detector-1.3.0.tgz#b42d641c448826e03c2b354272456a771ce453c0"
+  integrity sha512-ZsEbbZORsyHuO00lY1kV3/t72yp6Ysay6Pd17ZAlNGuGwmWDLCJxFpRs0IzfXfj1o4icJOkUEioexFHzyPurSQ==
 
 path-key@^3.1.0:
   version "3.1.1"
