@@ -31,7 +31,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@solidstate/hardhat-git": "^1.0.0-next.1",
+    "@solidstate/hardhat-git": "^1.0.0-next.2",
     "chalk": "^5.4.1",
     "cli-table3": "^0.6.5",
     "simple-git": "^3.27.0"
@@ -39,12 +39,12 @@
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^22.15.16",
+    "@types/node": "^22.15.17",
     "hardhat": "^3.0.0-next.7",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
-    "prettier-plugin-packagejson": "^2.5.11",
+    "prettier-plugin-packagejson": "^2.5.12",
     "prettier-plugin-solidity": "^2.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
