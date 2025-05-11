@@ -43,6 +43,8 @@ Add configuration under the `contractSizer` key:
 | `except`       | `Array` of `String` matchers used to exclude contracts                                                                      | `[]`    |
 | `unit`         | unit of measurement for the size of contracts, which can be expressed in 'B' (bytes), 'kB' (kilobytes) or 'KiB' (kibibytes) | `KiB`   |
 
+Additional configuration options are provided by [`@solidstate/hardhat-git`](https://www.npmjs.com/package/@solidstate/hardhat-git), which is included as a dependency.
+
 Run the included Hardhat task to output compiled contract sizes:
 
 ```bash

@@ -18,10 +18,8 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 ) => {
   if (hre.globalOptions.noSizeContracts) return;
 
-  // TODO: npmInstall parameter
-
   if (args.ref) {
-    hre = await createHardhatRuntimeEnvironmentAtGitRef(hre, args.ref);
+    hre = await createHardhatRuntimeEnvironmentAtGitRef(hre.config, args.ref);
   }
 
   if (!args.noCompile) {
