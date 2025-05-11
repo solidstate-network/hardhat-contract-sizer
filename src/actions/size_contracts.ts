@@ -5,7 +5,7 @@ import {
 import { printContractSizes } from '../lib/print.js';
 import { TASK_COMPILE } from '../task_names.js';
 import { createHardhatRuntimeEnvironmentAtGitRef } from '@solidstate/hardhat-git';
-import { NewTaskActionFunction } from 'hardhat/types/tasks';
+import type { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
   ref?: string;
