@@ -1,6 +1,6 @@
 import pkg from '../../package.json';
-import type { ContractSizerConfig, MergedOutputItem } from '../types.js';
-import type { OutputItem, SolcSettings } from '../types.js';
+import type { ContractSizerConfig, MergedContractSize } from '../types.js';
+import type { ContractSize, SolcSettings } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
 import { countOversizedContracts } from './contract_sizer.js';
 import chalk from 'chalk';
@@ -8,7 +8,7 @@ import Table from 'cli-table3';
 import { HardhatPluginError } from 'hardhat/plugins';
 
 const formatDisplayName = (
-  { sourceName, contractName }: OutputItem,
+  { sourceName, contractName }: ContractSize,
   flat: boolean,
 ) => {
   const fullyQualifiedName = `${sourceName}:${contractName}`;
@@ -49,13 +49,13 @@ const formatSizeDiff = (
 };
 
 export const printContractSizes = (
-  outputData: OutputItem[],
+  contractSizes: ContractSize[],
   config: ContractSizerConfig,
 ) => {
   // check for display name clashes among contracts
 
   if (config.flat) {
-    outputData.reduce((acc, entry) => {
+    contractSizes.reduce((acc, entry) => {
       const displayName = formatDisplayName(entry, config.flat);
 
       if (acc.has(displayName)) {
@@ -72,15 +72,15 @@ export const printContractSizes = (
 
   // group contracts by compilation settings
 
-  const outputDataBySolcSettings: { [solcVersion: string]: OutputItem[] } =
-    outputData.reduce(
+  const outputDataBySolcSettings: { [solcVersion: string]: ContractSize[] } =
+    contractSizes.reduce(
       (acc, el) => {
         const key = JSON.stringify(el.solcSettings);
         acc[key] ??= [];
         acc[key].push(el);
         return acc;
       },
-      {} as { [solcVersion: string]: OutputItem[] },
+      {} as { [solcVersion: string]: ContractSize[] },
     );
 
   // sort each group of contracts
@@ -180,7 +180,7 @@ export const printContractSizes = (
 
   // print or throw size errors, according to configuration
 
-  const oversizedCount = countOversizedContracts(outputData);
+  const oversizedCount = countOversizedContracts(contractSizes);
 
   if (oversizedCount > 0) {
     const subjectPredicateFragment =
@@ -200,13 +200,13 @@ export const printContractSizes = (
 };
 
 export const printContractSizesDiff = (
-  outputData: MergedOutputItem[],
+  mergedContractSizes: MergedContractSize[],
   config: ContractSizerConfig,
 ) => {
   // check for display name clashes among contracts
 
   if (config.flat) {
-    outputData.reduce((acc, entry) => {
+    mergedContractSizes.reduce((acc, entry) => {
       const displayName = formatDisplayName(entry, config.flat);
 
       if (acc.has(displayName)) {
@@ -224,15 +224,15 @@ export const printContractSizesDiff = (
   // group contracts by compilation settings
 
   const outputDataBySolcSettings: {
-    [solcVersion: string]: MergedOutputItem[];
-  } = outputData.reduce(
+    [solcVersion: string]: MergedContractSize[];
+  } = mergedContractSizes.reduce(
     (acc, el) => {
       const key = JSON.stringify(el.solcSettings);
       acc[key] ??= [];
       acc[key].push(el);
       return acc;
     },
-    {} as { [solcVersion: string]: MergedOutputItem[] },
+    {} as { [solcVersion: string]: MergedContractSize[] },
   );
 
   // sort each group of contracts
@@ -343,7 +343,7 @@ export const printContractSizesDiff = (
 
   // print size warning
 
-  const oversizedCount = countOversizedContracts(outputData);
+  const oversizedCount = countOversizedContracts(mergedContractSizes);
 
   if (oversizedCount > 0) {
     const subjectPredicateFragment =

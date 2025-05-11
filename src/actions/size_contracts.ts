@@ -24,9 +24,9 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
     await hre.tasks.getTask(TASK_COMPILE).run();
   }
 
-  const sizedContracts = await loadContractSizes(hre, hre.config.contractSizer);
+  const contractSizes = await loadContractSizes(hre, hre.config.contractSizer);
 
-  printContractSizes(sizedContracts, hre.config.contractSizer);
+  printContractSizes(contractSizes, hre.config.contractSizer);
 };
 
 export default action;

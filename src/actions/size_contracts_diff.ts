@@ -33,19 +33,13 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
     await hreRefB.tasks.getTask(TASK_COMPILE).run();
   }
 
-  const sizedContractsA = await loadContractSizes(
-    hre,
-    hre.config.contractSizer,
-  );
+  const contractSizesA = await loadContractSizes(hre, hre.config.contractSizer);
 
-  const sizedContractsB = await loadContractSizes(
-    hre,
-    hre.config.contractSizer,
-  );
+  const contractSizesB = await loadContractSizes(hre, hre.config.contractSizer);
 
   const mergedContractSizes = mergeContractSizes(
-    sizedContractsA,
-    sizedContractsB,
+    contractSizesA,
+    contractSizesB,
   );
 
   printContractSizesDiff(mergedContractSizes, hre.config.contractSizer);

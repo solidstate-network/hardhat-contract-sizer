@@ -16,7 +16,7 @@ export type SolcSettings = {
   runs: number;
 };
 
-export type OutputItem = {
+export type ContractSize = {
   sourceName: string;
   contractName: string;
   deploySize: number;
@@ -24,7 +24,7 @@ export type OutputItem = {
   solcSettings: SolcSettings;
 };
 
-export type MergedOutputItem = OutputItem & {
+export type MergedContractSize = ContractSize & {
   previousDeploySize: number;
   previousInitSize: number;
 };

@@ -15,12 +15,12 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
       !context.globalOptions.noSizeContracts &&
       !context.globalOptions.coverage
     ) {
-      const sizedContracts = await loadContractSizes(context, config);
+      const contractSizes = await loadContractSizes(context, config);
 
-      const oversizedCount = countOversizedContracts(sizedContracts);
+      const oversizedCount = countOversizedContracts(contractSizes);
 
       printContractSizes(
-        sizedContracts,
+        contractSizes,
         hre.config.contractSizer,
         oversizedCount,
       );

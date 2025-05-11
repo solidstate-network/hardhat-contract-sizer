@@ -1,7 +1,7 @@
 import type {
   ContractSizerConfig,
-  MergedOutputItem,
-  OutputItem,
+  MergedContractSize,
+  ContractSize,
   SolcSettings,
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
@@ -36,14 +36,14 @@ const getArtifacts = async (
 export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
-): Promise<OutputItem[]> => {
+): Promise<ContractSize[]> => {
   return await loadContractSizesFromArtifacts(context, config);
 };
 
 const loadContractSizesFromArtifacts = async (
   context: HookContext,
   config: ContractSizerConfig,
-): Promise<OutputItem[]> => {
+): Promise<ContractSize[]> => {
   const DEFAULT_SOLC_SETTINGS: SolcSettings = {
     solcVersion: 'unknown',
     optimizer: false,
@@ -83,7 +83,7 @@ const loadContractSizesFromArtifacts = async (
 
   // calculate contract sizes
 
-  const outputData: OutputItem[] = artifacts.map((artifact) => {
+  const outputData: ContractSize[] = artifacts.map((artifact) => {
     const {
       sourceName,
       contractName,
@@ -118,9 +118,9 @@ const loadContractSizesFromArtifacts = async (
 };
 
 export const mergeContractSizes = (
-  contractSizesA: OutputItem[],
-  contractSizesB: OutputItem[],
-): MergedOutputItem[] => {
+  contractSizesA: ContractSize[],
+  contractSizesB: ContractSize[],
+): MergedContractSize[] => {
   // contractSizesB represents the updated revision
   // contractSizesA represents the previous revision
 
@@ -130,7 +130,7 @@ export const mergeContractSizes = (
       acc[name] = el;
       return acc;
     },
-    {} as { [name: string]: OutputItem },
+    {} as { [name: string]: ContractSize },
   );
 
   const contractSizesBByName = contractSizesB.reduce(
@@ -139,10 +139,10 @@ export const mergeContractSizes = (
       acc[name] = el;
       return acc;
     },
-    {} as { [name: string]: OutputItem },
+    {} as { [name: string]: ContractSize },
   );
 
-  const mergedContractSizesByName: { [name: string]: MergedOutputItem } = {};
+  const mergedContractSizesByName: { [name: string]: MergedContractSize } = {};
 
   for (const name in contractSizesBByName) {
     const itemA = contractSizesAByName[name] ?? { deploySize: 0, initSize: 0 };
@@ -178,7 +178,7 @@ export const mergeContractSizes = (
   return Object.values(mergedContractSizesByName);
 };
 
-export const countOversizedContracts = (sizedContracts: OutputItem[]) => {
+export const countOversizedContracts = (sizedContracts: ContractSize[]) => {
   return sizedContracts.reduce((acc, el) => {
     if (el.deploySize > DEPLOYED_SIZE_LIMIT || el.initSize > INIT_SIZE_LIMIT) {
       acc++;
