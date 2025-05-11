@@ -1,5 +1,4 @@
 import {
-  countOversizedContracts,
   loadContractSizes,
   mergeContractSizes,
 } from '../lib/contract_sizer.js';
@@ -49,13 +48,7 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
     sizedContractsB,
   );
 
-  const oversizedCount = countOversizedContracts(sizedContractsB);
-
-  printContractSizesDiff(
-    mergedContractSizes,
-    hre.config.contractSizer,
-    oversizedCount,
-  );
+  printContractSizesDiff(mergedContractSizes, hre.config.contractSizer);
 };
 
 export default action;

@@ -1,7 +1,4 @@
-import {
-  countOversizedContracts,
-  loadContractSizes,
-} from '../lib/contract_sizer.js';
+import { loadContractSizes } from '../lib/contract_sizer.js';
 import { printContractSizes } from '../lib/print.js';
 import { TASK_COMPILE } from '../task_names.js';
 import { createHardhatRuntimeEnvironmentAtGitRef } from '@solidstate/hardhat-git';
@@ -29,9 +26,7 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 
   const sizedContracts = await loadContractSizes(hre, hre.config.contractSizer);
 
-  const oversizedCount = countOversizedContracts(sizedContracts);
-
-  printContractSizes(sizedContracts, hre.config.contractSizer, oversizedCount);
+  printContractSizes(sizedContracts, hre.config.contractSizer);
 };
 
 export default action;

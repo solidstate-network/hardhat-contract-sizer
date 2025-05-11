@@ -2,6 +2,7 @@ import pkg from '../../package.json';
 import type { ContractSizerConfig, MergedOutputItem } from '../types.js';
 import type { OutputItem, SolcSettings } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT, UNITS } from './constants.js';
+import { countOversizedContracts } from './contract_sizer.js';
 import chalk from 'chalk';
 import Table from 'cli-table3';
 import { HardhatPluginError } from 'hardhat/plugins';
@@ -50,7 +51,6 @@ const formatSizeDiff = (
 export const printContractSizes = (
   outputData: OutputItem[],
   config: ContractSizerConfig,
-  oversizedCount: number,
 ) => {
   // check for display name clashes among contracts
 
@@ -180,6 +180,8 @@ export const printContractSizes = (
 
   // print or throw size errors, according to configuration
 
+  const oversizedCount = countOversizedContracts(outputData);
+
   if (oversizedCount > 0) {
     const subjectPredicateFragment =
       oversizedCount === 1 ? 'contract exceeds' : 'contracts exceed';
@@ -200,7 +202,6 @@ export const printContractSizes = (
 export const printContractSizesDiff = (
   outputData: MergedOutputItem[],
   config: ContractSizerConfig,
-  oversizedCount: number,
 ) => {
   // check for display name clashes among contracts
 
@@ -341,6 +342,8 @@ export const printContractSizesDiff = (
   console.log(table.toString());
 
   // print size warning
+
+  const oversizedCount = countOversizedContracts(outputData);
 
   if (oversizedCount > 0) {
     const subjectPredicateFragment =
