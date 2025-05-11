@@ -1,7 +1,4 @@
-import {
-  countOversizedContracts,
-  loadContractSizes,
-} from '../lib/contract_sizer.js';
+import { loadContractSizes } from '../lib/contract_sizer.js';
 import { printContractSizes } from '../lib/print.js';
 import hre from 'hardhat';
 import type { SolidityHooks } from 'hardhat/types/hooks';
@@ -17,13 +14,7 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
     ) {
       const contractSizes = await loadContractSizes(context, config);
 
-      const oversizedCount = countOversizedContracts(contractSizes);
-
-      printContractSizes(
-        contractSizes,
-        hre.config.contractSizer,
-        oversizedCount,
-      );
+      printContractSizes(contractSizes, hre.config.contractSizer);
     }
 
     return next(context, artifactPaths);
