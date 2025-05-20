@@ -11,7 +11,7 @@ Output Solidity contract sizes with Hardhat.
 ```bash
 npm install --save-dev @solidstate/hardhat-contract-sizer
 # or
-yarn add --dev @solidstate/hardhat-contract-sizer
+pnpm add -D @solidstate/hardhat-contract-sizer
 ```
 
 ## Usage
@@ -50,7 +50,7 @@ Run the included Hardhat task to output compiled contract sizes:
 ```bash
 npx hardhat size-contracts
 # or
-yarn run hardhat size-contracts
+pnpm hardhat size-contracts
 ```
 
 By default, the hardhat `compile` task is run before sizing contracts. This behavior can be disabled with the `--no-compile` flag:
@@ -58,19 +58,19 @@ By default, the hardhat `compile` task is run before sizing contracts. This beha
 ```bash
 npx hardhat size-contracts --no-compile
 # or
-yarn run hardhat size-contracts --no-compile
+pnpm hardhat size-contracts --no-compile
 ```
 
 ## Development
 
-Install dependencies via Yarn:
+Install dependencies via pnpm:
 
 ```bash
-yarn install
+pnpm install
 ```
 
 Setup Husky to format code on commit:
 
 ```bash
-yarn prepare
+pnpm prepare
 ```
