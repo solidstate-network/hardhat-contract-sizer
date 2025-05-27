@@ -1,11 +1,11 @@
 import { loadContractSizes } from '../lib/contract_sizer.js';
 import { printContractSizes } from '../lib/print.js';
 import { TASK_COMPILE } from '../task_names.js';
-import { createHardhatRuntimeEnvironmentAtGitRef } from '@solidstate/hardhat-git';
+import { createHardhatRuntimeEnvironmentAtGitRev } from '@solidstate/hardhat-git';
 import type { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
-  ref?: string;
+  rev?: string;
   noCompile: boolean;
 }
 
@@ -15,8 +15,8 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 ) => {
   if (hre.globalOptions.noSizeContracts) return;
 
-  if (args.ref) {
-    hre = await createHardhatRuntimeEnvironmentAtGitRef(hre.config, args.ref);
+  if (args.rev) {
+    hre = await createHardhatRuntimeEnvironmentAtGitRev(hre.config, args.rev);
   }
 
   if (!args.noCompile) {

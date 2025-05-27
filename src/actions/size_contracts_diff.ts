@@ -4,12 +4,12 @@ import {
 } from '../lib/contract_sizer.js';
 import { printContractSizesDiff } from '../lib/print.js';
 import { TASK_COMPILE } from '../task_names.js';
-import { createHardhatRuntimeEnvironmentAtGitRef } from '@solidstate/hardhat-git';
+import { createHardhatRuntimeEnvironmentAtGitRev } from '@solidstate/hardhat-git';
 import type { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
-  refA: string;
-  refB: string;
+  revA: string;
+  revB: string;
   noCompile: boolean;
 }
 
@@ -19,18 +19,18 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
 ) => {
   if (hre.globalOptions.noSizeContracts) return;
 
-  const hreRefA = await createHardhatRuntimeEnvironmentAtGitRef(
+  const hreRevA = await createHardhatRuntimeEnvironmentAtGitRev(
     hre.config,
-    args.refA,
+    args.revA,
   );
 
-  const hreRefB = args.refB
-    ? await createHardhatRuntimeEnvironmentAtGitRef(hre.config, args.refB)
+  const hreRevB = args.revB
+    ? await createHardhatRuntimeEnvironmentAtGitRev(hre.config, args.revB)
     : hre;
 
   if (!args.noCompile) {
-    await hreRefA.tasks.getTask(TASK_COMPILE).run();
-    await hreRefB.tasks.getTask(TASK_COMPILE).run();
+    await hreRevA.tasks.getTask(TASK_COMPILE).run();
+    await hreRevB.tasks.getTask(TASK_COMPILE).run();
   }
 
   const contractSizesA = await loadContractSizes(hre, hre.config.contractSizer);

@@ -6,8 +6,8 @@ export default task(TASK_SIZE_CONTRACTS)
   .setDescription('Output the size of compiled contracts')
   .setAction(import.meta.resolve('../actions/size_contracts.js'))
   .addOption({
-    name: 'ref',
-    description: 'Git reference where contracts are defined',
+    name: 'rev',
+    description: 'Git revision where contracts are defined',
     defaultValue: undefined,
     type: ArgumentType.STRING_WITHOUT_DEFAULT,
   })
