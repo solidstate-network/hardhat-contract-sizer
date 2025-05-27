@@ -34,16 +34,16 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@solidstate/hardhat-git": "^1.0.0-next.3",
+    "@solidstate/hardhat-git": "^1.0.0-next.5",
     "chalk": "^5.4.1",
     "cli-table3": "^0.6.5"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^22.15.21",
-    "hardhat": "^3.0.0-next.10",
+    "hardhat": "^3.0.0-next.11",
     "husky": "^9.1.7",
-    "knip": "^5.57.2",
+    "knip": "^5.58.1",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-packagejson": "^2.5.14",
