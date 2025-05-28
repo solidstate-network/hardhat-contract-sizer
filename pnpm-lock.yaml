@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@solidstate/hardhat-git':
         specifier: ^1.0.0-next.5
-        version: 1.0.0-next.5(@nomicfoundation/hardhat-utils@3.0.0-next.0)(hardhat@3.0.0-next.11)
+        version: 1.0.0-next.5(@nomicfoundation/hardhat-utils@3.0.0-next.12)(hardhat@3.0.0-next.11)
       chalk:
         specifier: ^5.4.1
         version: 5.4.1
@@ -18,6 +18,9 @@ importers:
         specifier: ^0.6.5
         version: 0.6.5
     devDependencies:
+      '@nomicfoundation/hardhat-utils':
+        specifier: ^3.0.0-next.12
+        version: 3.0.0-next.12
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2
         version: 5.2.2(prettier@3.5.3)
@@ -371,11 +374,8 @@ packages:
   '@nomicfoundation/hardhat-errors@3.0.0-next.11':
     resolution: {integrity: sha512-75nxgEYHCIOZvD3cHBGFySMsGmxjFKbTi7GAQ6qeZpTfcppV4/jVD6K/E8WhVV99zYBr3QLv9JBy7c6biC2i4A==}
 
-  '@nomicfoundation/hardhat-utils@3.0.0-next.0':
-    resolution: {integrity: sha512-TTtozMpepsyQfSLjV+L+JgaM+wblQ1XQSJjjiBUBHaJYhB+q7ZVuC3ekNNCNY6jdj9Wx6soGCaGXdsPtnjcb9Q==}
-
-  '@nomicfoundation/hardhat-utils@3.0.0-next.11':
-    resolution: {integrity: sha512-syTQ8mi6O78PJow9NkIvzjEmv6PyMS+bfb4torAIMOIe8sj0sWXKK2ceWwvvOVhcWSzDsyTQaRsoyV8qwTZDCA==}
+  '@nomicfoundation/hardhat-utils@3.0.0-next.12':
+    resolution: {integrity: sha512-PKbfAuAtu3T1xZUuDfaDi2pzEyFP4X3r8dAMil/CxubxI0EKrapcw80hH0ZOXeRzzWi8difZ9JzKG7L2J3XlCQ==}
 
   '@nomicfoundation/hardhat-zod-utils@3.0.0-next.11':
     resolution: {integrity: sha512-g/C95y/4H0n/aXAgIXi3tbEpT2KQSypzzId/2busVVqo6j8+JQtMlQRDsnt+FC1XdI32HgmSHJGbmWd4OE4bqw==}
@@ -1582,22 +1582,11 @@ snapshots:
 
   '@nomicfoundation/hardhat-errors@3.0.0-next.11':
     dependencies:
-      '@nomicfoundation/hardhat-utils': 3.0.0-next.11
+      '@nomicfoundation/hardhat-utils': 3.0.0-next.12
     transitivePeerDependencies:
       - supports-color
 
-  '@nomicfoundation/hardhat-utils@3.0.0-next.0':
-    dependencies:
-      debug: 4.4.1
-      env-paths: 2.2.1
-      ethereum-cryptography: 2.2.1
-      fast-equals: 5.2.2
-      rfdc: 1.4.1
-      undici: 6.21.3
-    transitivePeerDependencies:
-      - supports-color
-
-  '@nomicfoundation/hardhat-utils@3.0.0-next.11':
+  '@nomicfoundation/hardhat-utils@3.0.0-next.12':
     dependencies:
       '@streamparser/json-node': 0.0.22
       debug: 4.4.1
@@ -1612,7 +1601,7 @@ snapshots:
 
   '@nomicfoundation/hardhat-zod-utils@3.0.0-next.11(zod@3.25.7)':
     dependencies:
-      '@nomicfoundation/hardhat-utils': 3.0.0-next.11
+      '@nomicfoundation/hardhat-utils': 3.0.0-next.12
       zod: 3.25.7
     transitivePeerDependencies:
       - supports-color
@@ -2012,9 +2001,9 @@ snapshots:
 
   '@solidity-parser/parser@0.20.1': {}
 
-  '@solidstate/hardhat-git@1.0.0-next.5(@nomicfoundation/hardhat-utils@3.0.0-next.0)(hardhat@3.0.0-next.11)':
+  '@solidstate/hardhat-git@1.0.0-next.5(@nomicfoundation/hardhat-utils@3.0.0-next.12)(hardhat@3.0.0-next.11)':
     dependencies:
-      '@nomicfoundation/hardhat-utils': 3.0.0-next.0
+      '@nomicfoundation/hardhat-utils': 3.0.0-next.12
       chalk: 5.4.1
       cli-table3: 0.6.5
       env-paths: 3.0.0
@@ -2246,7 +2235,7 @@ snapshots:
       '@ignored/edr': 0.10.0-alpha.4
       '@ignored/edr-optimism': 0.13.0-alpha.3
       '@nomicfoundation/hardhat-errors': 3.0.0-next.11
-      '@nomicfoundation/hardhat-utils': 3.0.0-next.11
+      '@nomicfoundation/hardhat-utils': 3.0.0-next.12
       '@nomicfoundation/hardhat-zod-utils': 3.0.0-next.11(zod@3.25.7)
       '@nomicfoundation/solidity-analyzer': 0.1.2
       '@sentry/core': 9.22.0

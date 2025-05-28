@@ -5,8 +5,8 @@ import type {
   SolcSettings,
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
+import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import type { HookContext } from 'hardhat/types/hooks';
-import fs from 'node:fs';
 
 const getArtifacts = async (
   context: HookContext,
@@ -65,17 +65,17 @@ const loadContractSizesFromArtifacts = async (
         const buildInfoPath =
           await context.artifacts.getBuildInfoPath(buildInfoId);
 
-        // TODO: buildInfoPath is never undefined
-        const content = await fs.promises.readFile(buildInfoPath!, 'utf-8');
-        const json = JSON.parse(content);
+        const buildInfo = (await readJsonFile(buildInfoPath!)) as any;
 
         buildInfoSolcSettings[buildInfoId] = {
-          solcVersion: json.solcVersion ?? DEFAULT_SOLC_SETTINGS.solcVersion,
+          solcVersion:
+            buildInfo.solcVersion ?? DEFAULT_SOLC_SETTINGS.solcVersion,
           optimizer:
-            json.input?.settings?.optimizer?.enabled ??
+            buildInfo.input?.settings?.optimizer?.enabled ??
             DEFAULT_SOLC_SETTINGS.optimizer,
           runs:
-            json.input?.settings?.optimizer?.runs ?? DEFAULT_SOLC_SETTINGS.runs,
+            buildInfo.input?.settings?.optimizer?.runs ??
+            DEFAULT_SOLC_SETTINGS.runs,
         };
       }
     }),
