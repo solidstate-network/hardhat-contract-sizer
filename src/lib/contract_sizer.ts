@@ -10,6 +10,12 @@ import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
 import type { HookContext } from 'hardhat/types/hooks';
 
+const DEFAULT_SOLC_SETTINGS: SolcSettings = {
+  solcVersion: 'unknown',
+  optimizer: false,
+  runs: 0,
+};
+
 export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
@@ -21,12 +27,6 @@ const loadContractSizesFromArtifacts = async (
   context: HookContext,
   config: ContractSizerConfig,
 ): Promise<ContractSize[]> => {
-  const DEFAULT_SOLC_SETTINGS: SolcSettings = {
-    solcVersion: 'unknown',
-    optimizer: false,
-    runs: 0,
-  };
-
   // get the solc settings used for each artifact, indexed by build info id
 
   const buildInfoSolcSettings: {
@@ -143,8 +143,6 @@ export const mergeContractSizes = (
 
     const itemA = contractSizesAByName[name];
 
-    // TODO: solc settings are not applicable because contract does not exist in current revision
-
     mergedContractSizesByName[name] = {
       sourceName: itemA.sourceName,
       contractName: itemA.contractName,
@@ -152,7 +150,7 @@ export const mergeContractSizes = (
       initSize: 0,
       previousDeploySize: itemA.deploySize,
       previousInitSize: itemA.initSize,
-      solcSettings: itemA.solcSettings,
+      solcSettings: DEFAULT_SOLC_SETTINGS,
       solcSettingsChanged: true,
     };
   }
