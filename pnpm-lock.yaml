@@ -51,6 +51,9 @@ importers:
       prettier-plugin-solidity:
         specifier: ^2.0.0
         version: 2.0.0(prettier@3.5.3)
+      tsx:
+        specifier: ^4.19.4
+        version: 4.19.4
       typescript:
         specifier: ^5.8.3
         version: 5.8.3

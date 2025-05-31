@@ -32,7 +32,8 @@
     "clean": "tsc --build --clean",
     "prepare": "husky",
     "prepublishOnly": "pnpm build",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "test": "pnpm build && hardhat compile && tsx --test"
   },
   "dependencies": {
     "@solidstate/hardhat-git": "^1.0.0-next.5",
@@ -51,6 +52,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-packagejson": "^2.5.15",
     "prettier-plugin-solidity": "^2.0.0",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
