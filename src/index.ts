@@ -1,48 +1,39 @@
-import './tasks/compile';
-import './tasks/size_contracts';
-import { extendConfig } from 'hardhat/config';
-import 'hardhat/types/config';
+import pkg from '../package.json';
+import taskSizeContracts from './tasks/size_contracts.js';
+import taskSizeContractsDiff from './tasks/size_contracts_diff.js';
+import './type_extensions.js';
+import { globalOption } from 'hardhat/config';
+import { ArgumentType } from 'hardhat/types/arguments';
+import type { HardhatPlugin } from 'hardhat/types/plugins';
 
-declare module 'hardhat/types/config' {
-  interface HardhatUserConfig {
-    contractSizer?: {
-      alphaSort?: boolean;
-      runOnCompile?: boolean;
-      flat?: boolean;
-      strict?: boolean;
-      only?: string[];
-      except?: string[];
-      outputFile?: string;
-      unit?: 'B' | 'kB' | 'KiB';
-    };
-  }
-
-  interface HardhatConfig {
-    contractSizer: {
-      alphaSort: boolean;
-      runOnCompile: boolean;
-      flat: boolean;
-      strict: boolean;
-      only: string[];
-      except: string[];
-      outputFile: string;
-      unit: 'B' | 'kB' | 'KiB';
-    };
-  }
-}
-
-extendConfig((config, userConfig) => {
-  config.contractSizer = Object.assign(
-    {
-      alphaSort: false,
-      runOnCompile: false,
-      flat: false,
-      strict: false,
-      only: [],
-      except: [],
-      outputFile: null,
-      unit: 'KiB',
+const plugin: HardhatPlugin = {
+  id: pkg.name,
+  npmPackage: pkg.name,
+  dependencies: [
+    async () => {
+      const { default: HardhatSolidstateUtils } = await import(
+        '@solidstate/hardhat-solidstate-utils'
+      );
+      return HardhatSolidstateUtils;
     },
-    userConfig.contractSizer,
-  );
-});
+    async () => {
+      const { default: HardhatGit } = await import('@solidstate/hardhat-git');
+      return HardhatGit;
+    },
+  ],
+  tasks: [taskSizeContracts, taskSizeContractsDiff],
+  hookHandlers: {
+    config: import.meta.resolve('./hooks/config.js'),
+    solidity: import.meta.resolve('./hooks/solidity.js'),
+  },
+  globalOptions: [
+    globalOption({
+      name: 'noSizeContracts',
+      description: 'Disables contract sizing',
+      defaultValue: false,
+      type: ArgumentType.BOOLEAN,
+    }),
+  ],
+};
+
+export default plugin;

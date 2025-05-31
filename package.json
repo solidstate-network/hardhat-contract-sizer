@@ -1,7 +1,6 @@
 {
   "name": "@solidstate/hardhat-contract-sizer",
-  "version": "3.0.0",
-  "license": "MIT",
+  "version": "3.0.0-next.0",
   "description": "Output Solidity contract sizes with Hardhat",
   "keywords": [
     "hardhat",
@@ -16,37 +15,46 @@
     "bytecode"
   ],
   "repository": "github:solidstate-network/hardhat-contract-sizer",
+  "license": "MIT",
   "author": "Nick Barry",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
-  "scripts": {
-    "build": "tsc --build",
-    "prepare": "husky",
-    "prettier": "prettier --write ."
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./types": "./dist/types.js"
   },
+  "types": "./dist/index.d.ts",
   "files": [
     "dist/",
     "src/"
   ],
-  "peerDependencies": {
-    "hardhat": "^2.0.0"
-  },
-  "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.14.7",
-    "hardhat": "^2.0.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.7",
-    "prettier": "^3.3.2",
-    "prettier-plugin-solidity": "^1.3.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.2"
+  "scripts": {
+    "build": "pnpm clean && tsc --build",
+    "clean": "tsc --build --clean",
+    "prepare": "husky",
+    "prepublishOnly": "pnpm build",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
-    "chalk": "^4.0.0",
-    "cli-table3": "^0.6.0",
-    "strip-ansi": "^6.0.0"
+    "@solidstate/hardhat-git": "^1.0.0-next.5",
+    "@solidstate/hardhat-solidstate-utils": "1.0.0-next.3",
+    "chalk": "^5.4.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-utils": "^3.0.0-next.12",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^22.15.21",
+    "hardhat": "^3.0.0-next.11",
+    "husky": "^9.1.7",
+    "knip": "^5.58.1",
+    "lint-staged": "github:ItsNickBarry/lint-staged#hide-all",
+    "prettier": "^3.5.3",
+    "prettier-plugin-packagejson": "^2.5.14",
+    "prettier-plugin-solidity": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "@nomicfoundation/hardhat-utils": "^3.0.0-next.12",
+    "hardhat": "^3.0.0-next.4"
   },
   "publishConfig": {
     "access": "public"

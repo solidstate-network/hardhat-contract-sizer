@@ -11,7 +11,7 @@ Output Solidity contract sizes with Hardhat.
 ```bash
 npm install --save-dev @solidstate/hardhat-contract-sizer
 # or
-yarn add --dev @solidstate/hardhat-contract-sizer
+pnpm add -D @solidstate/hardhat-contract-sizer
 ```
 
 ## Usage
@@ -19,7 +19,16 @@ yarn add --dev @solidstate/hardhat-contract-sizer
 Load plugin in Hardhat config:
 
 ```javascript
-require('@solidstate/hardhat-contract-sizer');
+import HardhatContractSizer from '@solidstate/hardhat-contract-sizer';
+
+const config: HardhatUserConfig = {
+  plugins: [
+    HardhatContractSizer,
+  ],
+  contractSizer: {
+    ... // see table for configuration options
+  },
+};
 ```
 
 Add configuration under the `contractSizer` key:
@@ -29,28 +38,19 @@ Add configuration under the `contractSizer` key:
 | `alphaSort`    | whether to sort results table alphabetically (default sort is by contract size)                                             | `false` |
 | `runOnCompile` | whether to output contract sizes automatically after compilation                                                            | `false` |
 | `flat`         | whether to hide the full path to the compilation artifact and output only the contract name                                 | `false` |
-| `strict`       | whether to throw an error if any contracts exceed the size limit (may cause compatibility issues with `solidity-coverage`)  | `false` |
+| `strict`       | whether to throw an error if any contracts exceed the size limit                                                            | `false` |
 | `only`         | `Array` of `String` matchers used to select included contracts, defaults to all contracts if `length` is 0                  | `[]`    |
 | `except`       | `Array` of `String` matchers used to exclude contracts                                                                      | `[]`    |
-| `outputFile`   | file path to write contract size report                                                                                     | `null`  |
 | `unit`         | unit of measurement for the size of contracts, which can be expressed in 'B' (bytes), 'kB' (kilobytes) or 'KiB' (kibibytes) | `KiB`   |
 
-```javascript
-contractSizer: {
-  alphaSort: true,
-  runOnCompile: true,
-  flat: true,
-  strict: true,
-  only: [':ERC20$'],
-}
-```
+Additional configuration options are provided by [`@solidstate/hardhat-git`](https://www.npmjs.com/package/@solidstate/hardhat-git), which is included as a dependency.
 
 Run the included Hardhat task to output compiled contract sizes:
 
 ```bash
 npx hardhat size-contracts
 # or
-yarn run hardhat size-contracts
+pnpm hardhat size-contracts
 ```
 
 By default, the hardhat `compile` task is run before sizing contracts. This behavior can be disabled with the `--no-compile` flag:
@@ -58,19 +58,19 @@ By default, the hardhat `compile` task is run before sizing contracts. This beha
 ```bash
 npx hardhat size-contracts --no-compile
 # or
-yarn run hardhat size-contracts --no-compile
+pnpm hardhat size-contracts --no-compile
 ```
 
 ## Development
 
-Install dependencies via Yarn:
+Install dependencies via pnpm:
 
 ```bash
-yarn install
+pnpm install
 ```
 
 Setup Husky to format code on commit:
 
 ```bash
-yarn prepare
+pnpm prepare
 ```
