@@ -296,11 +296,22 @@ export const printContractSizesDiff = (
       );
 
       table.push([
-        { content: formatDisplayName(item, config.flat) },
+        {
+          content: `${formatDisplayName(item, config.flat)}${!item.solcSettingsChanged ? chalk.gray('*') : ''}`,
+        },
         { content: `${deploySize} (${deployDiff})`, hAlign: 'right' },
         { content: `${initSize} (${initDiff})`, hAlign: 'right' },
       ]);
     }
+  }
+
+  if (mergedContractSizes.some((s) => !s.solcSettingsChanged)) {
+    table.push([
+      {
+        colSpan: 3,
+        content: chalk.gray('*solc settings have changed between revisions'),
+      },
+    ]);
   }
 
   console.log(table.toString());

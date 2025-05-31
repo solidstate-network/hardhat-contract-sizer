@@ -27,4 +27,5 @@ export type ContractSize = {
 export type MergedContractSize = ContractSize & {
   previousDeploySize: number;
   previousInitSize: number;
+  solcSettingsChanged: boolean;
 };

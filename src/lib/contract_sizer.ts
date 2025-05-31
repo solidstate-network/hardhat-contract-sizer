@@ -5,6 +5,7 @@ import type {
   SolcSettings,
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
+import { equal } from './solc_settings.js';
 import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
 import type { HookContext } from 'hardhat/types/hooks';
@@ -118,6 +119,10 @@ export const mergeContractSizes = (
     {} as { [name: string]: ContractSize },
   );
 
+  // merge the contract data from each revision
+  // first, loop over contracts in the current revision
+  // next, loop over contracts in the previous revision that were missed in the first loop
+
   const mergedContractSizesByName: { [name: string]: MergedContractSize } = {};
 
   for (const name in contractSizesBByName) {
@@ -128,27 +133,28 @@ export const mergeContractSizes = (
       ...itemB,
       previousDeploySize: itemA.deploySize,
       previousInitSize: itemA.initSize,
+      solcSettingsChanged: !equal(itemA.solcSettings, itemB.solcSettings),
     };
   }
 
   for (const name in contractSizesAByName) {
-    const item = mergedContractSizesByName[name];
+    // skip if already processed in first loop
+    if (mergedContractSizesByName[name]) continue;
 
-    if (!item) {
-      const itemA = contractSizesAByName[name];
+    const itemA = contractSizesAByName[name];
 
-      // TODO: solc settings are not applicable because contract does not exist in current revision
+    // TODO: solc settings are not applicable because contract does not exist in current revision
 
-      mergedContractSizesByName[name] = {
-        sourceName: itemA.sourceName,
-        contractName: itemA.contractName,
-        deploySize: 0,
-        initSize: 0,
-        previousDeploySize: itemA.deploySize,
-        previousInitSize: itemA.initSize,
-        solcSettings: itemA.solcSettings,
-      };
-    }
+    mergedContractSizesByName[name] = {
+      sourceName: itemA.sourceName,
+      contractName: itemA.contractName,
+      deploySize: 0,
+      initSize: 0,
+      previousDeploySize: itemA.deploySize,
+      previousInitSize: itemA.initSize,
+      solcSettings: itemA.solcSettings,
+      solcSettingsChanged: true,
+    };
   }
 
   return Object.values(mergedContractSizesByName);
