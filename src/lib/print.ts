@@ -109,10 +109,10 @@ export const printContractSizes = (
       content: chalk.bold('Contract Name'),
     },
     {
-      content: chalk.bold(`Deployed size (${config.unit}) (change)`),
+      content: chalk.bold(`Deployed size (${config.unit})`),
     },
     {
-      content: chalk.bold(`Initcode size (${config.unit}) (change)`),
+      content: chalk.bold(`Initcode size (${config.unit})`),
     },
   ]);
 
