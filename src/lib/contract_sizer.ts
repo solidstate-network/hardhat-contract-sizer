@@ -6,28 +6,8 @@ import type {
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
 import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
-import { filter } from '@solidstate/hardhat-solidstate-utils/filter';
+import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
 import type { HookContext } from 'hardhat/types/hooks';
-
-const getArtifacts = async (
-  context: HookContext,
-  config: ContractSizerConfig,
-) => {
-  // get list of all contracts and filter according to configuraiton
-
-  const fullNames = filter(
-    Array.from(await context.artifacts.getAllFullyQualifiedNames()),
-    config,
-  );
-
-  // get contract artifacts
-
-  const artifacts = await Promise.all(
-    fullNames.map((fullName) => context.artifacts.readArtifact(fullName)),
-  );
-
-  return artifacts;
-};
 
 export const loadContractSizes = async (
   context: HookContext,
@@ -73,9 +53,11 @@ const loadContractSizesFromArtifacts = async (
     }),
   );
 
-  // calculate contract sizes
+  // get contract artifacts, filtered according to configuration
 
-  const artifacts = await getArtifacts(context, config);
+  const artifacts = await readArtifacts(context, config);
+
+  // calculate contract sizes
 
   const outputData: ContractSize[] = artifacts.map((artifact) => {
     const {
