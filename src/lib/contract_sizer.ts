@@ -14,7 +14,7 @@ import type { HookContext } from 'hardhat/types/hooks';
 
 export const loadContractSizes = async (
   context: HookContext,
-  config: FilterOptions,
+  config?: FilterOptions,
 ): Promise<ContractSize[]> => {
   // get the solc settings used for each artifact, indexed by build info id
 
