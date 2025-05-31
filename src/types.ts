@@ -1,12 +1,12 @@
+import type { FilterOptions } from '@solidstate/hardhat-solidstate-utils/types';
+
 export type ContractSizerConfig = {
   alphaSort: boolean;
   runOnCompile: boolean;
   flat: boolean;
   strict: boolean;
-  only: string[];
-  except: string[];
   unit: 'B' | 'kB' | 'KiB';
-};
+} & FilterOptions;
 
 export type ContractSizerUserConfig = Partial<ContractSizerConfig>;
 

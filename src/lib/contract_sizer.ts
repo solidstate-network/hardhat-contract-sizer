@@ -6,6 +6,7 @@ import type {
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
 import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
+import { filter } from '@solidstate/hardhat-solidstate-utils/filter';
 import type { HookContext } from 'hardhat/types/hooks';
 
 const getArtifacts = async (
@@ -14,15 +15,10 @@ const getArtifacts = async (
 ) => {
   // get list of all contracts and filter according to configuraiton
 
-  const fullNames = Array.from(
-    await context.artifacts.getAllFullyQualifiedNames(),
-  ).filter((fullName) => {
-    if (config.only.length && !config.only.some((m) => fullName.match(m)))
-      return false;
-    if (config.except.length && config.except.some((m) => fullName.match(m)))
-      return false;
-    return true;
-  });
+  const fullNames = filter(
+    Array.from(await context.artifacts.getAllFullyQualifiedNames()),
+    config,
+  );
 
   // get contract artifacts
 
