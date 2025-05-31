@@ -48,6 +48,19 @@ const formatSizeDiff = (
   }
 };
 
+const generateOversizedContractsWarningMessage = (
+  oversizedCount: number,
+  unit: ContractSizerConfig['unit'],
+) => {
+  const subjectPredicateFragment =
+    oversizedCount === 1 ? 'contract exceeds' : 'contracts exceed';
+
+  const deployedSizeLimitFragment = `${formatSize(unit, DEPLOYED_SIZE_LIMIT)} ${unit}`;
+  const initSizeLimitFragment = `${formatSize(unit, INIT_SIZE_LIMIT)} ${unit}`;
+
+  return `Warning: ${oversizedCount} ${subjectPredicateFragment} the size limit for mainnet deployment (${deployedSizeLimitFragment} deployed, ${initSizeLimitFragment} init).`;
+};
+
 export const printContractSizes = (
   contractSizes: ContractSize[],
   config: ContractSizerConfig,
@@ -158,27 +171,25 @@ export const printContractSizes = (
     }
   }
 
-  console.log(table.toString());
-
-  // print or throw size errors, according to configuration
+  // print size warning
 
   const oversizedCount = countOversizedContracts(contractSizes);
 
   if (oversizedCount > 0) {
-    const subjectPredicateFragment =
-      oversizedCount === 1 ? 'contract exceeds' : 'contracts exceed';
+    const message = generateOversizedContractsWarningMessage(
+      oversizedCount,
+      config.unit,
+    );
 
-    const deployedSizeLimitFragment = `${formatSize(config.unit, DEPLOYED_SIZE_LIMIT)} ${config.unit}`;
-    const initSizeLimitFragment = `${formatSize(config.unit, INIT_SIZE_LIMIT)} ${config.unit}`;
-
-    const message = `Warning: ${oversizedCount} ${subjectPredicateFragment} the size limit for mainnet deployment (${deployedSizeLimitFragment} deployed, ${initSizeLimitFragment} init).`;
-
-    if (config.strict) {
-      throw new HardhatPluginError(pkg.name, message);
-    } else {
-      console.log(chalk.red(message));
-    }
+    table.push([
+      {
+        colSpan: 3,
+        content: chalk.red(message),
+      },
+    ]);
   }
+
+  console.log(table.toString());
 };
 
 export const printContractSizesDiff = (
@@ -314,21 +325,23 @@ export const printContractSizesDiff = (
     ]);
   }
 
-  console.log(table.toString());
-
   // print size warning
 
   const oversizedCount = countOversizedContracts(mergedContractSizes);
 
   if (oversizedCount > 0) {
-    const subjectPredicateFragment =
-      oversizedCount === 1 ? 'contract exceeds' : 'contracts exceed';
+    const message = generateOversizedContractsWarningMessage(
+      oversizedCount,
+      config.unit,
+    );
 
-    const deployedSizeLimitFragment = `${formatSize(config.unit, DEPLOYED_SIZE_LIMIT)} ${config.unit}`;
-    const initSizeLimitFragment = `${formatSize(config.unit, INIT_SIZE_LIMIT)} ${config.unit}`;
-
-    const message = `Warning: ${oversizedCount} ${subjectPredicateFragment} the size limit for mainnet deployment (${deployedSizeLimitFragment} deployed, ${initSizeLimitFragment} init).`;
-
-    console.log(chalk.red(message));
+    table.push([
+      {
+        colSpan: 3,
+        content: chalk.red(message),
+      },
+    ]);
   }
+
+  console.log(table.toString());
 };

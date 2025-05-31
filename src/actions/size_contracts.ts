@@ -1,7 +1,12 @@
-import { loadContractSizes } from '../lib/contract_sizer.js';
+import pkg from '../../package.json';
+import {
+  countOversizedContracts,
+  loadContractSizes,
+} from '../lib/contract_sizer.js';
 import { printContractSizes } from '../lib/print.js';
 import { TASK_COMPILE } from '../task_names.js';
 import { createHardhatRuntimeEnvironmentAtGitRev } from '@solidstate/hardhat-git';
+import { HardhatPluginError } from 'hardhat/plugins';
 import type { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
@@ -27,6 +32,16 @@ const action: NewTaskActionFunction<TaskActionArguments> = async (
   const contractSizes = await loadContractSizes(hre, hre.config.contractSizer);
 
   printContractSizes(contractSizes, hre.config.contractSizer);
+
+  if (
+    hre.config.contractSizer.strict &&
+    countOversizedContracts(contractSizes) > 0
+  ) {
+    throw new HardhatPluginError(
+      pkg.name,
+      'strict mode is enabled and oversized contracts were found',
+    );
+  }
 };
 
 export default action;
