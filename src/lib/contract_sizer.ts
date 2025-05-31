@@ -1,6 +1,5 @@
 import pkg from '../../package.json' with { type: 'json' };
 import type {
-  ContractSizerConfig,
   MergedContractSize,
   ContractSize,
   SolcSettings,
@@ -9,12 +8,13 @@ import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
 import { DEFAULT_SOLC_SETTINGS, equal } from './solc_settings.js';
 import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
+import type { FilterOptions } from '@solidstate/hardhat-solidstate-utils/types';
 import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
 
 export const loadContractSizes = async (
   context: HookContext,
-  config: ContractSizerConfig,
+  config: FilterOptions,
 ): Promise<ContractSize[]> => {
   // get the solc settings used for each artifact, indexed by build info id
 
