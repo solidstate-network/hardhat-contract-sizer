@@ -16,13 +16,6 @@ export const loadContractSizes = async (
   context: HookContext,
   config: ContractSizerConfig,
 ): Promise<ContractSize[]> => {
-  return await loadContractSizesFromArtifacts(context, config);
-};
-
-const loadContractSizesFromArtifacts = async (
-  context: HookContext,
-  config: ContractSizerConfig,
-): Promise<ContractSize[]> => {
   // get the solc settings used for each artifact, indexed by build info id
 
   const buildInfoSolcSettings: {
