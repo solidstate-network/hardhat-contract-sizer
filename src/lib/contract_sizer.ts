@@ -160,8 +160,8 @@ export const mergeContractSizes = (
   return Object.values(mergedContractSizesByName);
 };
 
-export const countOversizedContracts = (sizedContracts: ContractSize[]) => {
-  return sizedContracts.reduce((acc, el) => {
+export const countOversizedContracts = (contractSizes: ContractSize[]) => {
+  return contractSizes.reduce((acc, el) => {
     if (el.deploySize > DEPLOYED_SIZE_LIMIT || el.initSize > INIT_SIZE_LIMIT) {
       acc++;
     }
@@ -169,10 +169,8 @@ export const countOversizedContracts = (sizedContracts: ContractSize[]) => {
   }, 0);
 };
 
-export const validateNoOversizedContracts = (
-  sizedContracts: ContractSize[],
-) => {
-  const oversizedCount = countOversizedContracts(sizedContracts);
+export const validateNoOversizedContracts = (contractSizes: ContractSize[]) => {
+  const oversizedCount = countOversizedContracts(contractSizes);
 
   if (oversizedCount > 0) {
     throw new HardhatPluginError(
