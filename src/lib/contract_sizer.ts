@@ -100,6 +100,7 @@ export const mergeContractSizes = (
   contractSizesA: ContractSize[],
   contractSizesB: ContractSize[],
 ): MergedContractSize[] => {
+  // index contract size data by fully qualified contract name
   // contractSizesB represents the updated revision
   // contractSizesA represents the previous revision
 
@@ -121,31 +122,46 @@ export const mergeContractSizes = (
     {} as { [name: string]: ContractSize },
   );
 
-  // merge the contract data from each revision
-  // first, loop over contracts in the current revision
-  // next, loop over contracts in the previous revision that were missed in the first loop
+  // group contract names by whether contract exists in revision A, B, or both
 
-  const mergedContractSizesByName: { [name: string]: MergedContractSize } = {};
+  const contractNamesA = new Set(Object.keys(contractSizesAByName));
+  const contractNamesB = new Set(Object.keys(contractSizesBByName));
 
-  for (const name in contractSizesBByName) {
-    const itemA = contractSizesAByName[name] ?? { deploySize: 0, initSize: 0 };
+  const keptContractNames = contractNamesA.intersection(contractNamesB);
+  const removedContractNames = contractNamesA.difference(keptContractNames);
+  const addedContractNames = contractNamesB.difference(keptContractNames);
+
+  // merge the contract size data
+
+  const mergedContractSizes: MergedContractSize[] = [];
+
+  keptContractNames.forEach((name) => {
+    const itemA = contractSizesAByName[name];
     const itemB = contractSizesBByName[name];
 
-    mergedContractSizesByName[name] = {
+    mergedContractSizes.push({
       ...itemB,
       previousDeploySize: itemA.deploySize,
       previousInitSize: itemA.initSize,
       solcSettingsChanged: !equal(itemA.solcSettings, itemB.solcSettings),
-    };
-  }
+    });
+  });
 
-  for (const name in contractSizesAByName) {
-    // skip if already processed in first loop
-    if (mergedContractSizesByName[name]) continue;
+  addedContractNames.forEach((name) => {
+    const itemB = contractSizesBByName[name];
 
+    mergedContractSizes.push({
+      ...itemB,
+      previousDeploySize: 0,
+      previousInitSize: 0,
+      solcSettingsChanged: true,
+    });
+  });
+
+  removedContractNames.forEach((name) => {
     const itemA = contractSizesAByName[name];
 
-    mergedContractSizesByName[name] = {
+    mergedContractSizes.push({
       sourceName: itemA.sourceName,
       contractName: itemA.contractName,
       deploySize: 0,
@@ -154,10 +170,10 @@ export const mergeContractSizes = (
       previousInitSize: itemA.initSize,
       solcSettings: DEFAULT_SOLC_SETTINGS,
       solcSettingsChanged: true,
-    };
-  }
+    });
+  });
 
-  return Object.values(mergedContractSizesByName);
+  return mergedContractSizes;
 };
 
 export const countOversizedContracts = (contractSizes: ContractSize[]) => {
