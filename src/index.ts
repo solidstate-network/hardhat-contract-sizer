@@ -11,6 +11,12 @@ const plugin: HardhatPlugin = {
   npmPackage: pkg.name,
   dependencies: [
     async () => {
+      const { default: HardhatSolidstateUtils } = await import(
+        '@solidstate/hardhat-solidstate-utils'
+      );
+      return HardhatSolidstateUtils;
+    },
+    async () => {
       const { default: HardhatGit } = await import('@solidstate/hardhat-git');
       return HardhatGit;
     },
