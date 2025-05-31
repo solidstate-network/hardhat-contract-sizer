@@ -17,9 +17,6 @@ importers:
       chalk:
         specifier: ^5.4.1
         version: 5.4.1
-      cli-table3:
-        specifier: ^0.6.5
-        version: 0.6.5
     devDependencies:
       '@nomicfoundation/hardhat-utils':
         specifier: ^3.0.0-next.12
