@@ -1,3 +1,4 @@
+import pkg from '../../package.json';
 import type {
   ContractSizerConfig,
   MergedContractSize,
@@ -8,6 +9,7 @@ import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
 import { equal } from './solc_settings.js';
 import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
+import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
 
 const DEFAULT_SOLC_SETTINGS: SolcSettings = {
@@ -165,4 +167,17 @@ export const countOversizedContracts = (sizedContracts: ContractSize[]) => {
     }
     return acc;
   }, 0);
+};
+
+export const validateNoOversizedContracts = (
+  sizedContracts: ContractSize[],
+) => {
+  const oversizedCount = countOversizedContracts(sizedContracts);
+
+  if (oversizedCount > 0) {
+    throw new HardhatPluginError(
+      pkg.name,
+      'strict mode is enabled and oversized contracts were found',
+    );
+  }
 };
