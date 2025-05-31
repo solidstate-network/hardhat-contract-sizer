@@ -297,7 +297,7 @@ export const printContractSizesDiff = (
 
       table.push([
         {
-          content: `${formatDisplayName(item, config.flat)}${!item.solcSettingsChanged ? chalk.gray('*') : ''}`,
+          content: `${formatDisplayName(item, config.flat)}${item.solcSettingsChanged ? chalk.gray('*') : ''}`,
         },
         { content: `${deploySize} (${deployDiff})`, hAlign: 'right' },
         { content: `${initSize} (${initDiff})`, hAlign: 'right' },
@@ -305,7 +305,7 @@ export const printContractSizesDiff = (
     }
   }
 
-  if (mergedContractSizes.some((s) => !s.solcSettingsChanged)) {
+  if (mergedContractSizes.some((s) => s.solcSettingsChanged)) {
     table.push([
       {
         colSpan: 3,
