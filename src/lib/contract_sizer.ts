@@ -6,17 +6,11 @@ import type {
   SolcSettings,
 } from '../types.js';
 import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from './constants.js';
-import { equal } from './solc_settings.js';
+import { DEFAULT_SOLC_SETTINGS, equal } from './solc_settings.js';
 import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
 import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
-
-const DEFAULT_SOLC_SETTINGS: SolcSettings = {
-  solcVersion: 'unknown',
-  optimizer: false,
-  runs: 0,
-};
 
 export const loadContractSizes = async (
   context: HookContext,
