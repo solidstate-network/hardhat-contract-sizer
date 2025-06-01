@@ -2,10 +2,11 @@ import { DEPLOYED_SIZE_LIMIT, INIT_SIZE_LIMIT } from '../src/lib/constants.js';
 import {
   countOversizedContracts,
   loadContractSizes,
+  mergeContractSizes,
   validateNoOversizedContracts,
 } from '../src/lib/contract_sizer.js';
 import { DEFAULT_SOLC_SETTINGS } from '../src/lib/solc_settings.js';
-import type { ContractSize } from '../src/types.js';
+import type { ContractSize, MergedContractSize } from '../src/types.js';
 import hre from 'hardhat';
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
@@ -39,6 +40,155 @@ describe('loadContractSizes', () => {
         solcSettings.settings.runs || 0,
       );
     }
+  });
+});
+
+describe('mergeContractSizes', () => {
+  it('merges contract size arrays', async () => {
+    const removed: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'removed',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: true, runs: 0 },
+    };
+    const added: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'added',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: true, runs: 0 },
+    };
+    const unchanged: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'unchanged',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: true, runs: 0 },
+    };
+    const changedSize: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'changedSize',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: true, runs: 0 },
+    };
+    const changedSizeAfter = {
+      ...changedSize,
+      deploySize: changedSize.deploySize + 1,
+    };
+    const changedSolcVersion: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'changedSolcSettings',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: true, runs: 0 },
+    };
+    const changedSolcVersionAfter = {
+      ...changedSolcVersion,
+      solcSettings: { ...changedSolcVersion.solcSettings, runs: 1 },
+    };
+    const changedRuns: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'changedRuns',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: true, runs: 0 },
+    };
+    const changedRunsAfter = {
+      ...changedRuns,
+      solcSettings: { ...changedRuns.solcSettings, runs: 1 },
+    };
+    const changedRunsNoOptimizer: ContractSize = {
+      sourceName: 'contracts/Test.sol',
+      contractName: 'changedRunsNoOptimizer',
+      deploySize: 1,
+      initSize: 1,
+      solcSettings: { solcVersion: '0.8.29', optimizer: false, runs: 0 },
+    };
+    const changedRunsNoOptimizerAfter = {
+      ...changedRunsNoOptimizer,
+      solcSettings: { ...changedRunsNoOptimizer.solcSettings, runs: 1 },
+    };
+
+    const contractSizesA: ContractSize[] = [
+      removed,
+      unchanged,
+      changedSize,
+      changedSolcVersion,
+      changedRuns,
+      changedRunsNoOptimizer,
+    ];
+
+    const contractSizesB: ContractSize[] = [
+      added,
+      unchanged,
+      changedSizeAfter,
+      changedSolcVersionAfter,
+      changedRunsAfter,
+      changedRunsNoOptimizerAfter,
+    ];
+
+    const mergedContractSizes = mergeContractSizes(
+      contractSizesA,
+      contractSizesB,
+    );
+
+    const expected: MergedContractSize[] = [
+      {
+        ...added,
+        previousDeploySize: 0,
+        previousInitSize: 0,
+        solcSettingsChanged: true,
+      },
+      {
+        sourceName: removed.sourceName,
+        contractName: removed.contractName,
+        deploySize: 0,
+        initSize: 0,
+        previousDeploySize: removed.deploySize,
+        previousInitSize: removed.initSize,
+        solcSettings: DEFAULT_SOLC_SETTINGS,
+        solcSettingsChanged: true,
+      },
+      {
+        ...unchanged,
+        previousDeploySize: unchanged.deploySize,
+        previousInitSize: unchanged.initSize,
+        solcSettingsChanged: false,
+      },
+      {
+        ...changedSizeAfter,
+        previousDeploySize: changedSize.deploySize,
+        previousInitSize: changedSize.initSize,
+        solcSettingsChanged: false,
+      },
+      {
+        ...changedSolcVersionAfter,
+        previousDeploySize: changedSolcVersion.deploySize,
+        previousInitSize: changedSolcVersion.initSize,
+        solcSettingsChanged: true,
+      },
+      {
+        ...changedRunsAfter,
+        previousDeploySize: changedRuns.deploySize,
+        previousInitSize: changedRuns.initSize,
+        solcSettingsChanged: true,
+      },
+      {
+        ...changedRunsNoOptimizerAfter,
+        previousDeploySize: changedRunsNoOptimizer.deploySize,
+        previousInitSize: changedRunsNoOptimizer.initSize,
+        solcSettingsChanged: false,
+      },
+    ];
+
+    assert.deepStrictEqual(
+      mergedContractSizes.sort((a, b) =>
+        a.contractName > b.contractName ? 1 : -1,
+      ),
+      expected.sort((a, b) => (a.contractName > b.contractName ? 1 : -1)),
+    );
   });
 });
 
