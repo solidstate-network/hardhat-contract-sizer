@@ -33,7 +33,7 @@
     "prepare": "husky",
     "prepublishOnly": "pnpm build",
     "prettier": "prettier --write .",
-    "test": "pnpm build && hardhat compile && tsx --test"
+    "test": "pnpm clean && hardhat compile && tsx --test"
   },
   "dependencies": {
     "@solidstate/hardhat-git": "^1.0.0-next.5",
