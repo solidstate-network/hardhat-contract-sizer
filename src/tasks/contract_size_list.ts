@@ -1,10 +1,10 @@
-import { TASK_SIZE_CONTRACTS } from '../task_names.js';
+import { TASK_CONTRACT_SIZE_LIST } from '../task_names.js';
 import { task } from 'hardhat/config';
 import { ArgumentType } from 'hardhat/types/arguments';
 
-export default task(TASK_SIZE_CONTRACTS)
+export default task(TASK_CONTRACT_SIZE_LIST)
   .setDescription('Output the size of compiled contracts')
-  .setAction(import.meta.resolve('../actions/size_contracts.js'))
+  .setAction(import.meta.resolve('../actions/contract_size_list.js'))
   .addOption({
     name: 'rev',
     description: 'Git revision where contracts are defined',

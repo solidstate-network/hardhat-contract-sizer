@@ -1,6 +1,7 @@
 import pkg from '../package.json' with { type: 'json' };
-import taskSizeContracts from './tasks/size_contracts.js';
-import taskSizeContractsDiff from './tasks/size_contracts_diff.js';
+import taskContractSize from './tasks/contract_size.js';
+import taskContractSizeDiff from './tasks/contract_size_diff.js';
+import taskContractSizeList from './tasks/contract_size_list.js';
 import './type_extensions.js';
 import { globalOption } from 'hardhat/config';
 import { ArgumentType } from 'hardhat/types/arguments';
@@ -21,7 +22,7 @@ const plugin: HardhatPlugin = {
       return HardhatGit;
     },
   ],
-  tasks: [taskSizeContracts, taskSizeContractsDiff],
+  tasks: [taskContractSize, taskContractSizeList, taskContractSizeDiff],
   hookHandlers: {
     config: import.meta.resolve('./hooks/config.js'),
     solidity: import.meta.resolve('./hooks/solidity.js'),

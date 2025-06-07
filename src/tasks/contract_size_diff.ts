@@ -1,9 +1,9 @@
-import { TASK_SIZE_CONTRACTS_DIFF } from '../task_names.js';
+import { TASK_CONTRACT_SIZE_DIFF } from '../task_names.js';
 import { task } from 'hardhat/config';
 
-export default task(TASK_SIZE_CONTRACTS_DIFF)
+export default task(TASK_CONTRACT_SIZE_DIFF)
   .setDescription('Compare contract sizes across git revisions')
-  .setAction(import.meta.resolve('../actions/size_contracts_diff.js'))
+  .setAction(import.meta.resolve('../actions/contract_size_diff.js'))
   .addPositionalArgument({
     name: 'revA',
     description: 'Previous revision to compare against',
