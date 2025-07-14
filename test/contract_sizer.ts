@@ -8,6 +8,7 @@ import {
 import { DEFAULT_SOLC_SETTINGS } from '../src/lib/solc_settings.js';
 import type { ContractSize, MergedContractSize } from '../src/types.js';
 import hre from 'hardhat';
+import { getFullyQualifiedName } from 'hardhat/utils/contract-names';
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
@@ -23,7 +24,10 @@ describe('loadContractSizes', () => {
     for (const contractSize of contractSizes) {
       assert(
         fullyQualifiedNames.has(
-          `${contractSize.sourceName}:${contractSize.contractName}`,
+          getFullyQualifiedName(
+            contractSize.sourceName,
+            contractSize.contractName,
+          ),
         ),
       );
 

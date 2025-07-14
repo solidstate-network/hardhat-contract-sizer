@@ -6,12 +6,13 @@ import { countOversizedContracts } from './contract_sizer.js';
 import { createTable } from '@solidstate/hardhat-solidstate-utils/table';
 import chalk from 'chalk';
 import { HardhatPluginError } from 'hardhat/plugins';
+import { getFullyQualifiedName } from 'hardhat/utils/contract-names';
 
 const formatDisplayName = (
   { sourceName, contractName }: ContractSize,
   flat: boolean,
 ) => {
-  const fullyQualifiedName = `${sourceName}:${contractName}`;
+  const fullyQualifiedName = getFullyQualifiedName(sourceName, contractName);
   return flat ? fullyQualifiedName.split('/').pop()! : fullyQualifiedName;
 };
 

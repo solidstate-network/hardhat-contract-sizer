@@ -12,6 +12,7 @@ import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
 import type { FilterOptions } from '@solidstate/hardhat-solidstate-utils/types';
 import { HardhatPluginError } from 'hardhat/plugins';
 import type { HookContext } from 'hardhat/types/hooks';
+import { getFullyQualifiedName } from 'hardhat/utils/contract-names';
 
 export const loadContractSizes = async (
   context: HookContext,
@@ -88,20 +89,26 @@ export const mergeContractSizes = (
 
   const contractSizesAByName = contractSizesA.reduce(
     (acc, el) => {
-      const name = `${el.sourceName}:${el.contractName}`;
-      acc[name] = el;
+      const fullyQualifiedName = getFullyQualifiedName(
+        el.sourceName,
+        el.contractName,
+      );
+      acc[fullyQualifiedName] = el;
       return acc;
     },
-    {} as { [name: string]: ContractSize },
+    {} as { [fullyQualifiedName: string]: ContractSize },
   );
 
   const contractSizesBByName = contractSizesB.reduce(
     (acc, el) => {
-      const name = `${el.sourceName}:${el.contractName}`;
-      acc[name] = el;
+      const fullyQualifiedName = getFullyQualifiedName(
+        el.sourceName,
+        el.contractName,
+      );
+      acc[fullyQualifiedName] = el;
       return acc;
     },
-    {} as { [name: string]: ContractSize },
+    {} as { [fullyQualifiedName: string]: ContractSize },
   );
 
   // group contract names by whether contract exists in revision A, B, or both
