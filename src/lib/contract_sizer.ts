@@ -11,6 +11,7 @@ import { readJsonFile } from '@nomicfoundation/hardhat-utils/fs';
 import { readArtifacts } from '@solidstate/hardhat-solidstate-utils/filter';
 import type { FilterOptions } from '@solidstate/hardhat-solidstate-utils/types';
 import { HardhatPluginError } from 'hardhat/plugins';
+import type { BuildInfo } from 'hardhat/types/artifacts';
 import type { HookContext } from 'hardhat/types/hooks';
 import { getFullyQualifiedName } from 'hardhat/utils/contract-names';
 
@@ -31,16 +32,15 @@ export const loadContractSizes = async (
       const buildInfoPath =
         await context.artifacts.getBuildInfoPath(buildInfoId);
 
-      const buildInfo = (await readJsonFile(buildInfoPath!)) as any;
+      const buildInfo = (await readJsonFile(buildInfoPath!)) as BuildInfo;
 
       buildInfoSolcSettings[buildInfoId] = {
         solcVersion: buildInfo.solcVersion ?? DEFAULT_SOLC_SETTINGS.solcVersion,
         optimizer:
-          buildInfo.input?.settings?.optimizer?.enabled ??
+          buildInfo.input.settings.optimizer.enabled ??
           DEFAULT_SOLC_SETTINGS.optimizer,
         runs:
-          buildInfo.input?.settings?.optimizer?.runs ??
-          DEFAULT_SOLC_SETTINGS.runs,
+          buildInfo.input.settings.optimizer.runs ?? DEFAULT_SOLC_SETTINGS.runs,
       };
     }),
   );
