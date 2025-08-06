@@ -78,14 +78,14 @@ task('size-contracts', 'Output the size of compiled contracts')
 
         const { deployedBytecode, bytecode } =
           await hre.artifacts.readArtifact(fullName);
-        const deploySize = Buffer.from(
+        const deploySize = deployedBytecode? Buffer.from(
           deployedBytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
           'hex',
-        ).length;
-        const initSize = Buffer.from(
+        ).length: 0;
+        const initSize = bytecode? Buffer.from(
           bytecode.replace(/__\$\w*\$__/g, '0'.repeat(40)).slice(2),
           'hex',
-        ).length;
+        ).length: 0;
 
         outputData.push({
           fullName,
