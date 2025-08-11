@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.0-next.5
         version: 1.0.0-next.5(@nomicfoundation/hardhat-utils@3.0.0-next.30)(hardhat@3.0.0-next.30)
       '@solidstate/hardhat-solidstate-utils':
-        specifier: 1.0.0-next.3
-        version: 1.0.0-next.3(@nomicfoundation/hardhat-utils@3.0.0-next.30)(hardhat@3.0.0-next.30)
+        specifier: 1.0.0-next.4
+        version: 1.0.0-next.4(@nomicfoundation/hardhat-utils@3.0.0-next.30)(hardhat@3.0.0-next.30)
       chalk:
         specifier: ^5.5.0
         version: 5.5.0
@@ -485,8 +485,8 @@ packages:
       '@nomicfoundation/hardhat-utils': ^3.0.0-next.11
       hardhat: ^3.0.0-next.6
 
-  '@solidstate/hardhat-solidstate-utils@1.0.0-next.3':
-    resolution: {integrity: sha512-2YE6xzMiHq3ExLC9hQSDyOWmR2pS5g+jOGdMVZHZ7RrQgl3ZIzTIcD/yw9rjPORCM8k3GvPDhKcOB9TO5ype9A==}
+  '@solidstate/hardhat-solidstate-utils@1.0.0-next.4':
+    resolution: {integrity: sha512-lz3kL6gytA1XgFv8Urc79Id3nGL7HtvHFSsqV71raOehMz6RhnKZGvoHx6ioVAn2xmqpK3/3hoRiWuLhwxpv/w==}
     peerDependencies:
       '@nomicfoundation/hardhat-utils': ^3.0.0-next.11
       hardhat: ^3.0.0-next.6
@@ -567,8 +567,8 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
-  axios@1.9.0:
-    resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
+  axios@1.11.0:
+    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -721,8 +721,8 @@ packages:
       debug:
         optional: true
 
-  form-data@4.0.2:
-    resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   formatly@0.2.4:
@@ -1488,10 +1488,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@solidstate/hardhat-solidstate-utils@1.0.0-next.3(@nomicfoundation/hardhat-utils@3.0.0-next.30)(hardhat@3.0.0-next.30)':
+  '@solidstate/hardhat-solidstate-utils@1.0.0-next.4(@nomicfoundation/hardhat-utils@3.0.0-next.30)(hardhat@3.0.0-next.30)':
     dependencies:
       '@nomicfoundation/hardhat-utils': 3.0.0-next.30
-      axios: 1.9.0
+      axios: 1.11.0
       chalk: 5.5.0
       cli-table3: 0.6.5
       env-paths: 3.0.0
@@ -1586,10 +1586,10 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios@1.9.0:
+  axios@1.11.0:
     dependencies:
       follow-redirects: 1.15.9
-      form-data: 4.0.2
+      form-data: 4.0.4
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -1745,11 +1745,12 @@ snapshots:
 
   follow-redirects@1.15.9: {}
 
-  form-data@4.0.2:
+  form-data@4.0.4:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
       mime-types: 2.1.35
 
   formatly@0.2.4:

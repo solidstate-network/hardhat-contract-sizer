@@ -3,7 +3,6 @@ import { task } from 'hardhat/config';
 
 export default task(TASK_CONTRACT_SIZE_DIFF)
   .setDescription('Compare contract sizes across git revisions')
-  .setAction(import.meta.resolve('../actions/contract_size_diff.js'))
   .addPositionalArgument({
     name: 'revA',
     description: 'Previous revision to compare against',
@@ -18,4 +17,5 @@ export default task(TASK_CONTRACT_SIZE_DIFF)
     name: 'noCompile',
     description: "Don't compile before running this task",
   })
+  .setAction(() => import('../actions/contract_size_diff.js'))
   .build();

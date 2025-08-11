@@ -4,7 +4,6 @@ import { ArgumentType } from 'hardhat/types/arguments';
 
 export default task(TASK_CONTRACT_SIZE_LIST)
   .setDescription('Output the size of compiled contracts')
-  .setAction(import.meta.resolve('../actions/contract_size_list.js'))
   .addOption({
     name: 'rev',
     description: 'Git revision where contracts are defined',
@@ -15,4 +14,5 @@ export default task(TASK_CONTRACT_SIZE_LIST)
     name: 'noCompile',
     description: "Don't compile before running this task",
   })
+  .setAction(() => import('../actions/contract_size_list.js'))
   .build();
