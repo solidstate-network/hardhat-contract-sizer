@@ -1,48 +1,32 @@
-import './tasks/compile';
-import './tasks/size_contracts';
-import { extendConfig } from 'hardhat/config';
-import 'hardhat/types/config';
+import pkg from '../package.json' with { type: 'json' };
+import taskContractSize from './tasks/contract_size.js';
+import taskContractSizeDiff from './tasks/contract_size_diff.js';
+import taskContractSizeList from './tasks/contract_size_list.js';
+import './type_extensions.js';
+import { globalOption } from 'hardhat/config';
+import { ArgumentType } from 'hardhat/types/arguments';
+import type { HardhatPlugin } from 'hardhat/types/plugins';
 
-declare module 'hardhat/types/config' {
-  interface HardhatUserConfig {
-    contractSizer?: {
-      alphaSort?: boolean;
-      disambiguatePaths?: boolean;
-      runOnCompile?: boolean;
-      strict?: boolean;
-      only?: string[];
-      except?: string[];
-      outputFile?: string;
-      unit?: 'B' | 'kB' | 'KiB';
-    };
-  }
+const plugin: HardhatPlugin = {
+  id: pkg.name,
+  npmPackage: pkg.name,
+  dependencies: () => [
+    import('@solidstate/hardhat-solidstate-utils'),
+    import('@solidstate/hardhat-git'),
+  ],
+  tasks: [taskContractSize, taskContractSizeList, taskContractSizeDiff],
+  hookHandlers: {
+    config: () => import('./hooks/config.js'),
+    solidity: () => import('./hooks/solidity.js'),
+  },
+  globalOptions: [
+    globalOption({
+      name: 'noSizeContracts',
+      description: 'Disables contract sizing',
+      defaultValue: false,
+      type: ArgumentType.BOOLEAN,
+    }),
+  ],
+};
 
-  interface HardhatConfig {
-    contractSizer: {
-      alphaSort: boolean;
-      disambiguatePaths: boolean;
-      runOnCompile: boolean;
-      strict: boolean;
-      only: string[];
-      except: string[];
-      outputFile: string;
-      unit: 'B' | 'kB' | 'KiB';
-    };
-  }
-}
-
-extendConfig((config, userConfig) => {
-  config.contractSizer = Object.assign(
-    {
-      alphaSort: false,
-      disambiguatePaths: false,
-      runOnCompile: false,
-      strict: false,
-      only: [],
-      except: [],
-      outputFile: null,
-      unit: 'KiB',
-    },
-    userConfig.contractSizer,
-  );
-});
+export default plugin;
