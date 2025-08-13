@@ -36,16 +36,16 @@
     "test": "pnpm clean && hardhat compile && tsx --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@solidstate/hardhat-git": "^1.0.0-next.7",
-    "@solidstate/hardhat-solidstate-utils": "^1.0.0-next.5",
+    "@solidstate/hardhat-git": "^1.0.0",
+    "@solidstate/hardhat-solidstate-utils": "^1.0.0",
     "chalk": "^5.5.0"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-utils": "^3.0.0-next.31",
+    "@nomicfoundation/hardhat-utils": "^3.0.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^24.2.1",
-    "hardhat": "^3.0.0-next.31",
+    "hardhat": "^3.0.0",
     "husky": "^9.1.7",
     "knip": "^5.62.0",
     "lint-staged": "github:ItsNickBarry/lint-staged#knip",
@@ -56,8 +56,8 @@
     "typescript": "^5.9.2"
   },
   "peerDependencies": {
-    "@nomicfoundation/hardhat-utils": "^3.0.0-next.12",
-    "hardhat": "^3.0.0-next.4"
+    "@nomicfoundation/hardhat-utils": "^3.0.0",
+    "hardhat": "^3.0.0"
   },
   "publishConfig": {
     "access": "public"
