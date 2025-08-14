@@ -1,8 +1,8 @@
-import HardhatContractSizer from './src/index.js';
+import hardhatContractSizer from './src/index.js';
 import type { HardhatUserConfig } from 'hardhat/config';
 
 const config: HardhatUserConfig = {
-  plugins: [HardhatContractSizer],
+  plugins: [hardhatContractSizer],
 };
 
 export default config;

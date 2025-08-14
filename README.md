@@ -19,11 +19,11 @@ pnpm add -D @solidstate/hardhat-contract-sizer
 Load plugin in Hardhat config:
 
 ```javascript
-import HardhatContractSizer from '@solidstate/hardhat-contract-sizer';
+import hardhatContractSizer from '@solidstate/hardhat-contract-sizer';
 
 const config: HardhatUserConfig = {
   plugins: [
-    HardhatContractSizer,
+    hardhatContractSizer,
   ],
   contractSizer: {
     ... // see table for configuration options
