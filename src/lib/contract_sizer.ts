@@ -37,10 +37,11 @@ export const loadContractSizes = async (
       buildInfoSolcSettings[buildInfoId] = {
         solcVersion: buildInfo.solcVersion ?? DEFAULT_SOLC_SETTINGS.solcVersion,
         optimizer:
-          buildInfo.input.settings.optimizer.enabled ??
+          buildInfo.input.settings.optimizer?.enabled ??
           DEFAULT_SOLC_SETTINGS.optimizer,
         runs:
-          buildInfo.input.settings.optimizer.runs ?? DEFAULT_SOLC_SETTINGS.runs,
+          buildInfo.input.settings.optimizer?.runs ??
+          DEFAULT_SOLC_SETTINGS.runs,
       };
     }),
   );
