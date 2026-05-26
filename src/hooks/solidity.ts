@@ -4,7 +4,12 @@ import hre from 'hardhat';
 import type { SolidityHooks } from 'hardhat/types/hooks';
 
 export default async (): Promise<Partial<SolidityHooks>> => ({
-  onCleanUpArtifacts: async (context, artifactPaths, next) => {
+  processArtifactsAfterSuccessfulBuild: async (
+    context,
+    artifactPaths,
+    buildRootFilePaths,
+    buildOptions,
+  ) => {
     const config = context.config.contractSizer;
 
     if (
@@ -16,7 +21,5 @@ export default async (): Promise<Partial<SolidityHooks>> => ({
 
       printContractSizes(contractSizes, hre.config.contractSizer);
     }
-
-    return next(context, artifactPaths);
   },
 });
