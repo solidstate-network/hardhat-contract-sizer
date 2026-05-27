@@ -1,5 +1,6 @@
 import { TASK_CONTRACT_SIZE_DIFF } from '../task_names.js';
 import { task } from 'hardhat/config';
+import { ArgumentType } from 'hardhat/types/arguments';
 
 export default task(TASK_CONTRACT_SIZE_DIFF)
   .setDescription('Compare contract sizes across git revisions')
@@ -11,7 +12,7 @@ export default task(TASK_CONTRACT_SIZE_DIFF)
   .addPositionalArgument({
     name: 'revB',
     description: 'Current git revision to compare',
-    defaultValue: '',
+    type: ArgumentType.STRING_WITHOUT_DEFAULT,
   })
   .addFlag({
     name: 'noCompile',

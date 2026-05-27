@@ -9,7 +9,7 @@ import type { NewTaskActionFunction } from 'hardhat/types/tasks';
 
 interface TaskActionArguments {
   revA: string;
-  revB: string;
+  revB?: string;
   noCompile: boolean;
 }
 
