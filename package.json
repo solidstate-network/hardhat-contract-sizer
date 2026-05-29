@@ -1,6 +1,6 @@
 {
   "name": "@solidstate/hardhat-contract-sizer",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Output Solidity contract sizes with Hardhat",
   "keywords": [
     "hardhat",
@@ -52,9 +52,9 @@
     "prettier": "^3.8.3",
     "prettier-plugin-packagejson": "^3.0.2",
     "prettier-plugin-solidity": "^2.3.1",
+    "release-it": "^20.0.0",
     "tsx": "^4.22.3",
-    "typescript": "^6.0.3",
-    "release-it": "^20.0.0"
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "@nomicfoundation/hardhat-utils": "^4.0.0",
