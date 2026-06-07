@@ -4,10 +4,11 @@ import taskContractSizeDiff from './tasks/contract_size_diff.js';
 import taskContractSizeList from './tasks/contract_size_list.js';
 import './type_extensions.js';
 import { globalOption } from 'hardhat/config';
+import { definePlugin } from 'hardhat/plugins';
 import { ArgumentType } from 'hardhat/types/arguments';
 import type { HardhatPlugin } from 'hardhat/types/plugins';
 
-const plugin: HardhatPlugin = {
+const plugin: HardhatPlugin = definePlugin({
   id: pkg.name,
   npmPackage: pkg.name,
   dependencies: () => [
@@ -27,6 +28,6 @@ const plugin: HardhatPlugin = {
       type: ArgumentType.BOOLEAN,
     }),
   ],
-};
+});
 
 export default plugin;
