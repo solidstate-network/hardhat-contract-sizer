@@ -1,5 +1,5 @@
 import { UNITS } from '../lib/constants.js';
-import { ContractSizerConfig } from '../types.js';
+import type { ContractSizerConfig } from '../types.js';
 import type {
   ConfigHooks,
   HardhatUserConfigValidationError,
